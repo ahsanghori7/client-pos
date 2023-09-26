@@ -229,6 +229,7 @@
                     item_price = item_tax_method == 0 ? formatDecimal((unit_price-pr_tax_val), 4) : formatDecimal(unit_price);
 
                     unit_price = formatDecimal((unit_price+item_discount), 4);
+                    
                     invoice_tax += product_tax;
                     var subtotal = formatDecimal(((parseFloat(item_price) + parseFloat(pr_tax_val)) * parseFloat(item_qty)));
 
@@ -237,7 +238,7 @@
                     tr_html += ' <button id="' + row_no + '" data-item="' + item_id + '" data-price="' + item_price + '" title="Edit" style="cursor:pointer;" class="discount btn btn-xs btn-primary"><i class="fas fa-cut" aria-hidden="false"><i></button>';
                     tr_html += '</td>';
                     tr_html += '<td style="width: 15%;"><input class="form-control text-center rquantity" name="item_qty[]" type="number" value="' + (item_qty) + '" data-id="' + row_no + '" data-item="' + this.item_id + '" id="item_price_' + row_no + '"></td>';
-                    tr_html += '<td style="width: 15%;">'+formatMoney(item_price)+'<input class="form-control text-center" name="unit_price[]" type="hidden" value="' + (unit_price) + '"><input class="form-control text-center rprice" name="item_price[]" type="hidden" value="' + (item_price) + '" data-id="' + row_no + '" data-item="' + this.item_id + '" id="item_price_' + row_no + '" onClick="this.select();"></td>';
+                    tr_html += '<td style="width: 15%;"><input class="form-control text-center unit_price" name="unit_price[]" type="text" value="' + (unit_price) + '"><input class="form-control text-center rprice" name="item_price[]" type="hidden" value="' + (item_price) + '" data-id="' + row_no + '" data-item="' + this.item_id + '" id="item_price_' + row_no + '" onClick="this.select();"></td>';
                     tr_html += '<td style="width: 10%;">'+formatMoney(product_tax)+'<input class="form-control text-center rtax" name="item_tax[]" type="hidden" value="' + formatPOSDecimal(product_tax) + '" data-id="' + row_no + '" data-item="' + this.item_id + '" id="item_price_' + row_no + '" onClick="this.select();"><input class="form-control text-center" name="item_tax_id[]" type="hidden" value="' + (pr_tax.id) + '"></td>';
                     tr_html += '<td style="width: 10%;">'+formatMoney(product_discount)+'</td>';
                     tr_html += '<td style="width: 20%;">'+formatMoney((subtotal))+'</td>';
@@ -331,6 +332,22 @@
             }
 
             
+            localStorage.setItem('pospitems', JSON.stringify(pitems));
+            loadPOSpitems();
+        });
+
+        $(document).on("change", '.unit_price', function () {
+
+            if (!is_numeric($(this).val()) || parseFloat($(this).val()) < 0) {
+                bootbox.alert('Unexpected Value');
+                return;
+            }
+
+            var row = $(this).closest('tr');
+            var new_price = parseFloat($(this).val()),
+            item_id = row.attr('data-item-id');
+            let item = pitems[item_id];
+            pitems[item_id].price = new_price;
             localStorage.setItem('pospitems', JSON.stringify(pitems));
             loadPOSpitems();
         });

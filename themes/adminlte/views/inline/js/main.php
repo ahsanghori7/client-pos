@@ -951,9 +951,10 @@
             }
             var row = $(this).closest('tr');
             if(row){
-                var new_price = parseFloat($(this).val()), item_id = row.attr('data-item-id');
+                var new_price = parseFloat($(this).val()), 
+                item_id = row.attr('data-item-id');
                 if(items[item_id]){
-                item = items[item_id];
+                let item = items[item_id];
                 items[item_id].price = new_price;
                 localStorage.setItem('slitems', JSON.stringify(items));
                 }
@@ -962,6 +963,7 @@
             }
             
         });
+        
         $('#rpair_form').on("focus", '.repair_quantity', function () {
             old_row_qty = $(this).val();
         }).on("change", '.repair_quantity', function () {
@@ -973,9 +975,8 @@
             if(row) {
                 var new_qty = parseInt($(this).val()),
                 item_id = row.attr('data-item-id');
-                console.log(new_qty);
                 if(items[item_id]){
-                    item = items[item_id];
+                    let item = items[item_id];
                     items[item_id].qty = new_qty;
                     localStorage.setItem('slitems', JSON.stringify(items));
                 }

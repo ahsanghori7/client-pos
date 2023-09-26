@@ -1,0 +1,95 @@
+    .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+        padding: 0px 8px;
+    }
+    .font16 { font-size: 16px; font-weight: bold; }
+    .btn-pr {
+        border: 1px solid #eee;
+        cursor: pointer;
+        height: 60px;
+        margin: 0 0 3px 2px;
+        padding: 2px;
+        /*width: 10.5%;*/
+        min-width: 100px;
+        overflow: hidden;
+        display: inline-block;
+        font-size: 13px;
+    }
+    
+    .btn-pr span {
+        display: table-cell;
+        height: 45px;
+        line-height: 15px;
+        vertical-align: middle;
+        text-transform: uppercase;
+        min-width: 94px;
+        overflow: hidden;
+    }
+    .btn-pr.active { background: #eee; border: 1px solid #e5e5e5; cursor: default;  }
+#posTable thead, #posTable tbody { display: block; }
+#product-list #posTable tbody {
+    height: 250px;          
+    overflow-y: auto;    
+}
+
+#totalTable tbody tr{
+    width: 100%;
+    display: inline-table;
+}
+
+    .ui-autocomplete {
+z-index: 99999;
+}
+.btn-app {
+    border-radius: 3px;
+    position: relative;
+    padding: 0;
+    margin: 0 0 10px 10px;
+    min-width: 80px;
+    height: 60px;
+    text-align: center;
+    color: #666;
+    border: 1px solid #ddd;
+    background-color: #f4f4f4;
+    font-size: 12px;
+}
+.table_cat {
+    height: 130px !important;
+    width: 100px;
+    white-space: normal;
+    overflow: hidden;
+    font-weight: 700;
+}
+.label-btnpr{
+    bottom: 0px !important;
+    display: block;
+    padding: 9px;
+}
+
+.product {
+    border: 1px solid #eee;
+    cursor: pointer;
+    height: 115px;
+    margin: 0 0 3px 2px;
+    padding: 2px;
+    width: 10.5%;
+    min-width: 100px;
+    overflow: hidden;
+    display: inline-block;
+    font-size: 13px;
+}
+
+.product span {
+    display: table-cell;
+    height: 45px;
+    line-height: 15px;
+    vertical-align: middle;
+    text-transform: uppercase;
+    width: 10.5%;
+    min-width: 94px;
+    overflow: hidden;
+}
+
+.product img {
+    max-height: 60px !important;
+}
+.product.active { background: #eee; border: 1px solid #e5e5e5; cursor: default;  }

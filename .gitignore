@@ -1,0 +1,4 @@
+application/cache
+sftp-config.json
+*.sql
+vendor

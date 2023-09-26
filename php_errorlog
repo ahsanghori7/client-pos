@@ -1,0 +1,2 @@
+[20-Sep-2023 12:54:19 Europe/Athens] PHP Fatal error:  require_once(): Failed opening required './inline/js/open_register.php' (include_path='.:/usr/local/php74/pear') in /home/customer/www/e-hamzatel.gr/public_html/themes/adminlte/views/pos/open_register.php on line 3
+[20-Sep-2023 12:55:25 Europe/Athens] PHP Fatal error:  require_once(): Failed opening required '/themes/adminlte/views/inline/js/open_register.php' (include_path='.:/usr/local/php74/pear') in /home/customer/www/e-hamzatel.gr/public_html/themes/adminlte/views/pos/open_register.php on line 3

@@ -79,6 +79,13 @@ $config['my_config'] = array(
 
 		),
 
+		'pos-return' => array(
+			'name'		=> 'view/sales',
+			'url'		=> 'sales',
+			'icon'		=> 'fa fa-list',
+			'icon_material'		=> 'list',
+
+		),
 
 		'purchases' => array(
 			'name'		=> 'purchases',

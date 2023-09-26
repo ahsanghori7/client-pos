@@ -369,7 +369,7 @@ $lang['utilities/index'] 						= 'Veritabanı Yardımcı Programları';
 $lang['reports/sales'] 							= 'Satış';
 $lang['reports/drawer'] 						= 'Kasa Raporu';
 $lang['pos/index'] 								= 'POS';
-
+$lang['view/sales'] 							= 'View Sales';
 
 ///NEW
 $lang['model_based_search'] 					= 'Seçilen Modeli kullanarak Ürün listesini daraltın';
@@ -1077,7 +1077,7 @@ $lang['return_note']                         = 'Return Note';
 $lang['return_purchase_added']               = 'Return purchase successfully added';
 $lang['return_has_been_added']               = 'Few items had been returned for this purchase';
 $lang['return_tip']                          = 'Please edit the return quantity below. You can remove the item or set the return quantity to zero if it is not being returned';
-
+$lang['return_sales']                        = 'Sales Return';
 
 $lang['total_collected'] = 'Total Collected';
 $lang['my_commission'] = 'My Commission';

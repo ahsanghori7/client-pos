@@ -383,7 +383,7 @@ $lang['utilities/index'] = 'اداة قاعدة البيانات';
 $lang['reports/sales'] = 'المبيعات';
 $lang['reports/drawer'] = 'تقرير الدرج';
 $lang['pos/index'] = 'POS';
-
+$lang['view/sales'] 	= 'View Sales';
 
 
 ///NEW

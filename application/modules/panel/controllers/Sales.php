@@ -12,6 +12,14 @@ class Sales extends Auth_Controller
         $this->data['pos_settings'] = $this->pos_settings;
     }
 
+    public function index()
+    {
+        $this->mPageTitle = lang('sales');
+
+        $this->repairer->checkPermissions();
+        $this->render('sales/index');
+    }
+
     public function payments($id = null) {
         $this->data['payments'] = $this->pos_model->getInvoicePayments($id);
         $this->data['inv'] = $this->pos_model->getInvoiceByID($id);
@@ -267,6 +275,36 @@ class Sales extends Auth_Controller
             $this->session->set_flashdata('message', lang('sale_deleted'));
             redirect('welcome');
         }
+    }
+
+    public function getSales()
+    {
+        $this->repairer->checkPermissions('index');
+
+        $return_link = anchor('panel/sales/return_sales/$1', '<i class="fas fa-angle-double-left"></i>' . lang('return_purchase'), 'class="dropdown-item"');
+
+        $action = '<div class="text-center"><div class="btn-group dropleft">'
+        . '<button type="button" class="btn  btn-primary dropdown-toggle" data-toggle="dropdown">'
+        . "Actions" . ' <span class="caret"></span></button>
+        <ul class="dropdown-menu " role="menu">
+            ' . $return_link . '
+        </ul>
+    </div></div>';
+        $this->load->library('datatables');
+        $this->datatables
+            // ->select("id, DATE_FORMAT(date, '%Y-%m-%d %T') as date, reference_no, supplier, status, grand_total, attachment")
+            // ->from('purchases');
+
+             ->select("LPAD(sales.id, 4, '0') as sale_id, 
+             DATE_FORMAT(date, '%m-%d-%Y %T') as date, 
+             customer, 
+             (SELECT GROUP_CONCAT(product_name) FROM sale_items WHERE sale_items.sale_id = sales.id) as name, 
+              paid ,payment_status")
+                ->from('sales')
+                ->where('sale_status', 'completed')
+                ;
+        $this->datatables->add_column("Actions", $action, "id");
+        echo $this->datatables->generate();
     }
 
 }

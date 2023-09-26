@@ -383,7 +383,7 @@ $lang['utilities/index'] = 'Utilitaire BDD';
 $lang['reports/sales'] = 'Ventes';
 $lang['reports/drawer'] = 'Reporting';
 $lang['pos/index'] = 'POS';
-
+$lang['view/sales'] 							= 'View Sales';
 
 
 ///NEW
@@ -1105,7 +1105,7 @@ $lang['rma_number']                         = 'RMA Number';
 $lang['return_ref']                         = 'Return Ref.';
 $lang['Shipped']                         = 'Shipped';
 $lang['Return Accepted']                         = 'Return Accepted';
-
+$lang['return_sales']                        = 'Sales Return';
 
 
 $lang['Return'] = 'Return';

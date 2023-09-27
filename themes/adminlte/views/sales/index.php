@@ -2,7 +2,7 @@
 
 
 <?php 
-    echo form_open('panel/purchases/purchase_actions', 'id="action-form"');
+    echo form_open('panel/sales/sales_actions', 'id="action-form"');
 ?>
 
 

@@ -172,6 +172,7 @@ $lang['product_name']                       = "Product Name";
 $lang['product_code']                       = "Product Code";
 $lang['edit_product']                       = "Edit Product";
 
+$lang['s_price']                            = "S Price";
 $lang['net_unit_cost']                      = "Net Unit Cost";
 $lang['quantity']                           = "Quantity";
 $lang['discount']                           = "Discount";

@@ -8,6 +8,7 @@ class Sales extends Auth_Controller
     {
         parent::__construct();
         $this->load->model('pos_model');
+        $this->load->model('sales_model');
         $this->pos_settings = $this->pos_model->getSetting();
         $this->data['pos_settings'] = $this->pos_settings;
     }
@@ -281,7 +282,7 @@ class Sales extends Auth_Controller
     {
         $this->repairer->checkPermissions('index');
 
-        $return_link = anchor('panel/sales/return_sales/$1', '<i class="fas fa-angle-double-left"></i>' . lang('return_purchase'), 'class="dropdown-item"');
+        $return_link = anchor('panel/sales/return_sales/$1', '<i class="fas fa-angle-double-left"></i>' . lang('return_sales'), 'class="dropdown-item"');
 
         $action = '<div class="text-center"><div class="btn-group dropleft">'
         . '<button type="button" class="btn  btn-primary dropdown-toggle" data-toggle="dropdown">'
@@ -291,20 +292,123 @@ class Sales extends Auth_Controller
         </ul>
     </div></div>';
         $this->load->library('datatables');
-        $this->datatables
-            // ->select("id, DATE_FORMAT(date, '%Y-%m-%d %T') as date, reference_no, supplier, status, grand_total, attachment")
-            // ->from('purchases');
-
-             ->select("LPAD(sales.id, 4, '0') as sale_id, 
+        $this->datatables->select("LPAD(sales.id, 4, '0') as sale_id, 
              DATE_FORMAT(date, '%m-%d-%Y %T') as date, 
              customer, 
              (SELECT GROUP_CONCAT(product_name) FROM sale_items WHERE sale_items.sale_id = sales.id) as name, 
               paid ,payment_status")
                 ->from('sales')
-                ->where('sale_status', 'completed')
-                ;
-        $this->datatables->add_column("Actions", $action, "id");
+                ->where('sale_status', 'completed');
+        $this->datatables->add_column("Actions", $action, "sale_id");
         echo $this->datatables->generate();
+    }
+
+    public function return_sales($id = null)
+    {
+        $this->repairer->checkPermissions('return_sales');
+
+        if ($this->input->get('id')) {
+            $id = ltrim($this->input->get('id'));
+        }
+
+        $purchase = $this->sales_model->getPurchaseByID($id);
+        if (!$purchase) {
+            $this->session->set_flashdata('error', lang('purchase_already_returned'));
+            redirect($_SERVER['HTTP_REFERER']);
+        }
+     
+        if (isset($_POST['formPost']) && $_POST['formPost'] == true) {
+            
+            $i = isset($_POST['product']) ? sizeof($_POST['product']) : 0;
+            $total_qty = 0;
+            $actutal_total= 0;
+            for ($r = 0; $r < $i; $r++) {
+                $item_id            = $_POST['product_id'][$r];
+                $item_code          = $_POST['product'][$r];
+                $item_quantity =    $_POST['quantity'][$r];
+
+                if (isset($item_code) && isset($item_quantity) && $item_quantity > 0) {
+                    $product_details = $this->sales_model->getProductByCode($item_code);
+                    $actutal_qty = $this->sales_model->getActutalQty($item_code, $id);
+                    $actutal_qty = $actutal_qty->quantity;
+        
+                    $item_name        = $product_details->name;
+   
+                    $product = [
+                        'product_id'        => $item_id,
+                        'quantity'     => $item_quantity,
+                        'quantity_balance'  => ($actutal_qty-$item_quantity)
+                    ];
+
+                    $products[] = ($product);
+                    $total_qty = $total_qty+$item_quantity;
+                    $actutal_total = ($actutal_total+$actutal_qty);
+                }
+            }
+            if (empty($products)) {
+                $this->form_validation->set_rules('product', lang('order_items'), 'required');
+            } else {
+                krsort($products);
+            }
+
+            if($actutal_total > $total_qty){
+                $return_status = 'partial';
+            }else{
+                $return_status = 'completed';
+            }
+            $data  = [
+                'return_status' => $return_status,
+                'comment' => $_POST['note'],
+                'sale_id' => $id
+            ];
+        }
+
+        if (isset($_POST['formPost']) && $_POST['formPost'] == true && $this->sales_model->addReturn($data, $products)) {
+            $this->session->set_flashdata('message', lang('return_purchase_added'));
+            redirect('panel/sales');
+        } else {
+            $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
+
+            $this->data['inv'] = $purchase;
+            // if ($this->data['inv']->status != 'received' && $this->data['inv']->status != 'partial') {
+            //     $this->session->set_flashdata('error', lang('purchase_status_x_received'));
+            //     //redirect($_SERVER['HTTP_REFERER']);
+            // }
+            
+            $inv_items = $this->sales_model->getAllSalesItems($id);
+            $c = rand(100000, 9999999);
+
+            foreach ($inv_items as $item) {
+                $row                   = $this->sales_model->getProductByID($item->product_id);
+
+                $row->base_quantity    = $item->quantity;
+                $row->base_unit        = $row->unit;
+                $row->base_unit_cost   = $row->cost ? $row->cost : $item->unit_cost;
+                $row->qty              = $item->quantity;
+                $row->oqty             = $item->quantity;
+
+                $row->purchase_item_id = $item->id;
+                $row->received         = $item->quantity;
+                $row->discount         = $item->item_discount ? $item->item_discount : '0';
+                
+                $row->real_unit_price   = $item->real_unit_price;
+                $row->tax_rate         = $item->tax_rate_id;
+                $row->subtotal         = $item->subtotal;
+                $row->remaining_qty    = $this->sales_model->getRemainingQty($item->product_id , $item->sale_id)->quantity_balance ?? null;
+                
+                unset($row->details, $row->product_details, $row->price, $row->file, $row->product_group_id);
+                $tax_rate = $this->settings_model->getTaxRateByID($row->tax_rate);
+                $ri       = $row->id;
+
+                $pr[$ri] = ['id' => $c, 'item_id' => $row->id, 'label' => $row->name . ' (' . $row->code . ')', 'row' => $row, 'tax_rate' => $tax_rate, 'options' => null];
+
+                $c++;
+            }
+
+            $this->data['inv_items'] = json_encode($pr);
+            $this->data['id']        = $id;
+            $this->render('sales/return_sales');
+        }
     }
 
 }

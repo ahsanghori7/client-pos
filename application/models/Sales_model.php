@@ -221,16 +221,36 @@ class Sales_model extends CI_Model
     }
     public function addReturn($data, $items)
     {
-        if ($this->db->insert('sales_return', $data)) {
-            $id = $this->db->insert_id();
-            foreach ($items as $item) {
-                $item['return_id'] = $id;
-                $this->db->insert('return_items', $item);
-                // $this->db->update('inventory', array('cost' => $item['unit_cost']), array('id' => $item['product_id']));
-            }
+        $q = $this->db->get_where('sales_return', array('sale_id' => $data['sale_id']), 1);
+        if ($q->num_rows() > 0) {
+            $id = $q->row()->return_id;
 
-           return true;
+            foreach ($items as $item) {
+                $p = $this->db->get_where('return_items', array('return_id' => $id, 'product_id' => $item['product_id']), 1);
+                if ($p->num_rows() > 0) {
+                    $qty = ($p->row()->quantity + $item['quantity']);
+                    $remain = ($p->row()->quantity_balance - $item['quantity']);
+                    $this->db->update('return_items', array('quantity' => ($qty), 'quantity_balance' => $remain), array('return_id' => $id, 'product_id' => $item['product_id']));
+                }else{
+                    $item['return_id'] = $id;
+                    $this->db->insert('return_items', $item);
+                }
+            }
+            return true;
+        }else{
+
+            if ($this->db->insert('sales_return', $data)) {
+                $id = $this->db->insert_id();
+                foreach ($items as $item) {
+                    $item['return_id'] = $id;
+                    $this->db->insert('return_items', $item);
+                    // $this->db->update('inventory', array('cost' => $item['unit_cost']), array('id' => $item['product_id']));
+                }
+    
+               return true;
+            }
         }
+ 
         return false;
     }
 

@@ -171,6 +171,7 @@ $lang['add_product']                        = "Add Product";
 $lang['product_name']                       = "Product Name";
 $lang['product_code']                       = "Product Code";
 $lang['edit_product']                       = "Edit Product";
+$lang['s_price']                            = "S Price";
 
 $lang['net_unit_cost']                      = "Net Unit Cost";
 $lang['quantity']                           = "Quantity";
@@ -383,7 +384,7 @@ $lang['utilities/index'] = 'Utilitaire BDD';
 $lang['reports/sales'] = 'Ventes';
 $lang['reports/drawer'] = 'Reporting';
 $lang['pos/index'] = 'POS';
-
+$lang['view/sales'] 							= 'View Sales';
 
 
 ///NEW
@@ -1105,7 +1106,7 @@ $lang['rma_number']                         = 'RMA Number';
 $lang['return_ref']                         = 'Return Ref.';
 $lang['Shipped']                         = 'Shipped';
 $lang['Return Accepted']                         = 'Return Accepted';
-
+$lang['return_sales']                        = 'Sales Return';
 
 
 $lang['Return'] = 'Return';

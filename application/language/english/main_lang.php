@@ -172,6 +172,7 @@ $lang['product_name']                       = "Product Name";
 $lang['product_code']                       = "Product Code";
 $lang['edit_product']                       = "Edit Product";
 
+$lang['s_price']                            = "S Price";
 $lang['net_unit_cost']                      = "Net Unit Cost";
 $lang['quantity']                           = "Quantity";
 $lang['discount']                           = "Discount";
@@ -383,7 +384,7 @@ $lang['utilities/index'] = 'Database Utilities';
 $lang['reports/sales'] = 'Sales';
 $lang['reports/drawer'] = 'Drawer Report';
 $lang['pos/index'] = 'POS';
-
+$lang['view/sales'] 							= 'View Sales';
 
 
 ///NEW
@@ -1091,7 +1092,7 @@ $lang['return_note']                         = 'Return Note';
 $lang['return_purchase_added']               = 'Return purchase successfully added';
 $lang['return_has_been_added']               = 'Few items had been returned for this purchase';
 $lang['return_tip']                          = 'Please edit the return quantity below. You can remove the item or set the return quantity to zero if it is not being returned';
-
+$lang['return_sales']                        = 'Sales Return';
 
 $lang['total_collected'] = 'Total Collected';
 $lang['my_commission'] = 'My Commission';

@@ -382,7 +382,7 @@ $lang['utilities/index'] = 'Database Utilities';
 $lang['reports/sales'] = 'Sales';
 $lang['reports/drawer'] = 'Drawer Report';
 $lang['pos/index'] = 'POS';
-
+$lang['view/sales'] 							= 'View Sales';
 
 ///NEW
 $lang['model_based_search'] = 'Grenzen Sie die Artikelliste mit dem ausgew&auml;hlten Modell ein';
@@ -1110,7 +1110,7 @@ $lang['rma_number']                         = 'RMA Number';
 $lang['return_ref']                         = 'Return Ref.';
 $lang['Shipped']                         = 'Shipped';
 $lang['Return Accepted']                         = 'Return Accepted';
-
+$lang['return_sales']                        = 'Sales Return';
 
 
 $lang['Return'] = 'Return';

@@ -575,10 +575,6 @@
 
         footer += `<button class="btn btn-primary" id="sign_repair" href="#signModal" data-toggle="modal" data-mode="add_signature"><i class="fas fa-signature"></i> <span class="d-none d-sm-inline">${lang.sign_repair}</span></button>`;
 
-
-        footer += `<button href="#prerepair" class="prerepair_show btn btn-primary"><i class="fa fa-plus-circle"></i> <span class="d-none d-sm-inline">${lang.pre_repair_checklist}</span></button>`;
-
-        footer += `<button id="repair_submit"  role="button" form="rpair_form"  class="repair_submit btn btn-success" data-mode="add"><i class="fa fa-plus"></i>${lang.add}</span></button>`;
         footer += `<button id="repair_submit_"  role="button" form="rpair_form"  class="repair_submit btn btn-success" data-again="true" data-mode="add"><i class="fa fa-plus"></i> ${lang.add_again}</span></button>`;
 
         footer += '</div>';
@@ -951,9 +947,10 @@
             }
             var row = $(this).closest('tr');
             if(row){
-                var new_price = parseFloat($(this).val()), item_id = row.attr('data-item-id');
+                var new_price = parseFloat($(this).val()), 
+                item_id = row.attr('data-item-id');
                 if(items[item_id]){
-                item = items[item_id];
+                let item = items[item_id];
                 items[item_id].price = new_price;
                 localStorage.setItem('slitems', JSON.stringify(items));
                 }
@@ -962,6 +959,7 @@
             }
             
         });
+        
         $('#rpair_form').on("focus", '.repair_quantity', function () {
             old_row_qty = $(this).val();
         }).on("change", '.repair_quantity', function () {
@@ -973,9 +971,8 @@
             if(row) {
                 var new_qty = parseInt($(this).val()),
                 item_id = row.attr('data-item-id');
-                console.log(new_qty);
                 if(items[item_id]){
-                    item = items[item_id];
+                    let item = items[item_id];
                     items[item_id].qty = new_qty;
                     localStorage.setItem('slitems', JSON.stringify(items));
                 }

@@ -575,10 +575,6 @@
 
         footer += `<button class="btn btn-primary" id="sign_repair" href="#signModal" data-toggle="modal" data-mode="add_signature"><i class="fas fa-signature"></i> <span class="d-none d-sm-inline">${lang.sign_repair}</span></button>`;
 
-
-        footer += `<button href="#prerepair" class="prerepair_show btn btn-primary"><i class="fa fa-plus-circle"></i> <span class="d-none d-sm-inline">${lang.pre_repair_checklist}</span></button>`;
-
-        footer += `<button id="repair_submit"  role="button" form="rpair_form"  class="repair_submit btn btn-success" data-mode="add"><i class="fa fa-plus"></i>${lang.add}</span></button>`;
         footer += `<button id="repair_submit_"  role="button" form="rpair_form"  class="repair_submit btn btn-success" data-again="true" data-mode="add"><i class="fa fa-plus"></i> ${lang.add_again}</span></button>`;
 
         footer += '</div>';

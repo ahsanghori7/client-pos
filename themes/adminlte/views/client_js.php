@@ -103,20 +103,7 @@
             <div class="row">
               <div class="col-md-8">
                 <div class="row">
-                  <div class="col-lg-4 col-sm-4 col-xs-12 col-md-4">
-                    <div class="form-group">
-                      <div class="form-group">
-                        <?=lang('reparation_imei', 'imei');?>
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text">
-                            <i class="fas fa-laptop"></i></span>
-                          </div>
-                          <input id="imei" name="imei" type="text" class="validate form-control imei_typeahead">
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+
                   <div class="col-lg-4 col-sm-4 col-xs-12 col-md-4">
                     <div class="form-group">
                       <?=lang('client_title', 'client_name');?>
@@ -138,19 +125,7 @@
                   </div>
 
         
-                  <div class="col-lg-4 col-sm-4 col-xs-12 col-md-4">
-                    <div class="form-group">
-                      <?=lang('reparation_category', 'category_select');?>
-
-
-                      <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text"><i class="fa  fa-folder"></i></span>
-                        </div>
-                        <input id="category_name" name="category" type="text" class="validate form-control categories_typeahead">
-                      </div>
-                    </div>
-                  </div>
+               
                   <div class="col-lg-4 col-sm-4 col-xs-12 col-md-4">
                     <div class="form-group">
                       <div class="form-group">
@@ -171,30 +146,8 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-lg-4 col-sm-4 col-xs-12 col-md-4">
-                      <div class="form-group">
-                        <?=lang('model_manufacturer', 'reparation_manufacturer');?>
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text">
-                            <i class="fas fa-link"></i></span>
-                          </div>
-                           <input class="form-control manufacturer_name_typeahead" id="reparation_manufacturer" name="manufacturer" required="" >
-                        </div>
-                      </div>
-                  </div>
-                  <div class="col-lg-4 col-sm-4 col-xs-12 col-md-4">
-                    <div class="form-group">
-                      <?=lang('reparation_model', 'reparation_model');?>
-                      <div class="input-group">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text">
-                            <i class="fas fa-link"></i></span>
-                          </div>
-                          <input class="form-control model_name_typeahead" id="reparation_model" name="model" required="" >
-                        </div>
-                    </div>
-                  </div>
+                
+                  
                   <div class="col-lg-4 col-sm-4 col-xs-12 col-md-4">
                     <div class="form-group">
                         <?=lang('reparation_defect', 'defect');?>
@@ -207,7 +160,20 @@
                         </div>
                     </div>
                   </div>
-
+                          
+                  <div class="col-lg-4 col-sm-4 col-xs-12 col-md-4">
+                    <div class="form-group">
+                        <?=lang('reparation_service_charges', 'service_charges');?>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">
+                            <i class="fas fa-truck"></i></span>
+                          </div>
+                          <input id="service_charges" name="service_charges" min="0" type="number" value="0" step="any" class="validate form-control">
+                        </div>
+                      </div>
+                  </div>
+                  
                   <?php $hide_repair_fields = json_decode($settings->hide_repair_fields);?>
 
                   <?php if($hide_repair_fields->error_code): ?>
@@ -230,17 +196,44 @@
 
                   <div class="col-lg-4 col-sm-4 col-xs-12 col-md-4">
                     <div class="form-group">
-                      <?=lang('reparation_service_charges', 'service_charges');?>
-                      <div class="input-group">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text">
-                          <i class="fas fa-truck"></i></span>
+                        <?=lang('reparation_category', 'category_select');?>
+
+
+                        <div class="input-group mb-3">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fa  fa-folder"></i></span>
+                          </div>
+                          <input id="category_name" name="category" type="text" class="validate form-control categories_typeahead">
                         </div>
-                        <input id="service_charges" name="service_charges" min="0" type="number" value="0" step="any" class="validate form-control">
                       </div>
-                    </div>
+                  </div>
+                   
+                  <div class="col-lg-4 col-sm-4 col-xs-12 col-md-4">
+                      <div class="form-group">
+                        <?=lang('model_manufacturer', 'reparation_manufacturer');?>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">
+                            <i class="fas fa-link"></i></span>
+                          </div>
+                           <input class="form-control manufacturer_name_typeahead" id="reparation_manufacturer" name="manufacturer" required="" >
+                        </div>
+                      </div>
                   </div>
 
+                  <div class="col-lg-4 col-sm-4 col-xs-12 col-md-4">
+                    <div class="form-group">
+                      <?=lang('reparation_model', 'reparation_model');?>
+                      <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">
+                            <i class="fas fa-link"></i></span>
+                          </div>
+                          <input class="form-control model_name_typeahead" id="reparation_model" name="model" required="" >
+                        </div>
+                    </div>
+                  </div>
+                  
                   <?php if($hide_repair_fields->expected_close_date): ?>
                   <div class="col-lg-4 col-sm-4 col-xs-12 col-md-4">
                     <div class="form-group">
@@ -273,7 +266,32 @@
                     </div>
                   </div>
                   <?php endif;?>
-
+                  
+                    <div class="col-lg-4 col-sm-4 col-xs-12 col-md-4">
+                      <div class="form-group">
+                      <?=lang('taxrate_title', 'potax2');?>
+                      <select id="potax2" class="form-control input-tip select" name="order_tax" style="width: 100%;">
+                        <?php foreach ($tax_rates as  $tax): ?>
+                        <option value="<?= $tax['id'] ?>"><?= $tax['name']; ?></option>
+                        <?php endforeach; ?>
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <div class="col-lg-4 col-sm-4 col-xs-12 col-md-4">
+                    <div class="form-group">
+                      <div class="form-group">
+                        <?=lang('reparation_imei', 'imei');?>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text">
+                            <i class="fas fa-laptop"></i></span>
+                          </div>
+                          <input id="imei" name="imei" type="text" class="validate form-control imei_typeahead">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   
                   <?php if($hide_repair_fields->has_warranty): ?>
                   <div class="col-lg-4 col-sm-4 col-xs-12 col-md-4">
@@ -387,14 +405,7 @@
                 </div>
               </div>
               <div class="col-md-4">
-                <div class="form-group">
-                  <?=lang('taxrate_title', 'potax2');?>
-                  <select id="potax2" class="form-control input-tip select" name="order_tax" style="width: 100%;">
-                    <?php foreach ($tax_rates as  $tax): ?>
-                    <option value="<?= $tax['id'] ?>"><?= $tax['name']; ?></option>
-                    <?php endforeach; ?>
-                  </select>
-                </div>
+             
                 <div class="form-group combo">
                   <?= lang("add_item", 'add_item'); ?>
 

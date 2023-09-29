@@ -137,9 +137,11 @@
                           </div>
                           <select required id="assigned_to" name="assigned_to" class="form-control m-bot15" >
                           <?php
-                            foreach($users as $user){
-                                echo '<option value="'.$user->id.'">'.$user->first_name . ' ' . $user->last_name .'</option>';
+                          if(isset($technicians_list)){
+                            foreach($technicians_list as $technician){
+                                echo '<option value="'.$technician['id'].'">'.$technician['name'].'</option>';
                             } 
+                          }
                             ?>
                           </select>
                         </div>

@@ -57,6 +57,13 @@ $config['my_config'] = array(
 			'icon_material'		=> 'people',
 		),
 
+		'technician' => array(
+			'name'		=> 'technician/index',
+			'url'		=> 'technicians',
+			'icon'		=> 'fas fa-wrench',
+			'icon_material'		=> 'people',
+		),
+
 		'inventory' => array(
 			'name'		=> 'inventory',
 			'url'		=> 'inventory',

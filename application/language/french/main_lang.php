@@ -361,6 +361,7 @@ $lang['main_nav_login'] = 'Login';
 $lang['home'] = 'Accueil';
 $lang['repair/index'] = 'Reparations';
 $lang['customers/index'] = 'Clients';
+$lang['technician/index'] = 'Technicians';
 $lang['inventory'] = 'Stock/Inventaire';
 $lang['inventory/index'] = 'Voir stock';
 $lang['inventory/add'] = 'Ajouter Stock/Produit';

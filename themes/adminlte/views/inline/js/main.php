@@ -1474,6 +1474,41 @@
             });
         });
     
+        jQuery(document).on("click", "#modify_technician", function () {
+            jQuery('#titclienti').html(`${lang.edit} ${lang.client_title}`);
+            var num = jQuery(this).data("num");
+            $('#client_form').trigger("reset");
+            $('#client_form').parsley().reset();
+    
+            jQuery.ajax({
+                type: "POST",
+                url: base_url + "panel/customers/getCustomerByID",
+                data: "id=" + encodeURI(num) + "&token=" + token,
+                cache: false,
+                dataType: "json",
+                success: function (data) {
+                    jQuery('#name1').val(data.name);
+                    jQuery('#company1').val(data.company);
+                    jQuery('#route').val(data.address);
+                    jQuery('#locality').val(data.city)
+                    jQuery('#telephone').val(data.telephone);
+                    jQuery('#email1').val(data.email)
+                    jQuery('#comment1').val(data.comment);
+                    jQuery('#postal_code').val(data.postal_code);
+                    jQuery('#vat1').val(data.vat);
+                    jQuery('#cf1').val(data.cf);
+    
+                    $('#showIfImage').hide();
+                    if (data.image) {
+                        $('#showIfImage').show();
+                        $('#view_image_in').attr('data-num', data.image);
+                        $('#delete_customer_image').attr('data-num', data.id);
+                    }
+                    jQuery('#footerClient1').html(`<button data-dismiss="modal" class="pull-left btn btn-default" type="button"><i class="fa fa-reply"></i> ${lang.go_back}</button><button id="submit_client" role="button" form="client_form" class="btn btn-success" data-mode="modify" data-num="${encodeURI(num)}"><i class="fa fa-save"></i> ${lang.save} ${lang.client_title}</button>`)
+                }
+            });
+        });
+
     $(function () {
 
     $( "#client_name" ).select2({

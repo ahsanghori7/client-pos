@@ -85,6 +85,7 @@ $lang['client_ssn'] 							= 'SSN';
 $lang['client_comment'] 						= 'Comment';
 
 $lang['client_title'] 							= 'Client';
+$lang['technician_title'] 						= 'Technician';
 $lang['client_deleted'] 						= 'Client was deleted from the database';
 $lang['insert_reparation'] 						= 'Insert Reparation';
 $lang['all_client_reparation'] 					= 'All the Reparation of the Customer';

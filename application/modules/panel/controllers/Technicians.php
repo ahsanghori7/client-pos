@@ -33,7 +33,7 @@ class Technicians extends Auth_Controller
     {
         $this->mPageTitle = lang('clients');
         $this->repairer->checkPermissions('index');
-        $this->render('clients/index');
+        $this->render('technicians/index');
     }
 
 	// GENERATE THE AJAX TABLE CONTENT //
@@ -51,14 +51,14 @@ class Technicians extends Auth_Controller
             . ('actions') . ' <span class="caret"></span></button>
         <ul class="dropdown-menu" role="menu">';
 
-        $actions .= "<a data-dismiss='modal' class='view_client dropdown-item' href='#view_client' data-toggle='modal' data-num='$1'><i class='fas fa-check'></i> ".lang('view_client')."</a>";
+        $actions .= "<a data-dismiss='modal' class='view_client dropdown-item' href='#view_technician' data-toggle='modal' data-num='$1'><i class='fas fa-check'></i> ".lang('view_client')."</a>";
         
 
 
-        $actions .= "<a class='dropdown-item' data-dismiss='modal' id='modify_client' href='#clientmodal' data-toggle='modal' data-num='$1'><i class='fas fa-edit'></i> ".lang('edit_client')."</a>";
+        $actions .= "<a class='dropdown-item' data-dismiss='modal' id='modify_technician' href='#clientmodal' data-toggle='modal' data-num='$1'><i class='fas fa-edit'></i> ".lang('edit_client')."</a>";
 
 
-        $actions .= "<a class='dropdown-item' id='delete_client' data-num='$1'><i class='fas fa-trash'></i> ".lang('delete_client')."</a>";
+        $actions .= "<a class='dropdown-item' id='delete_technician' data-num='$1'><i class='fas fa-trash'></i> ".lang('delete_client')."</a>";
         $actions .= "<a class='dropdown-item' id='view_image' data-num='$2'><i class='fas fa-image'></i> ".lang('view_image')."</a>";
         $actions .= '</ul></div>';
 
@@ -74,7 +74,7 @@ class Technicians extends Auth_Controller
         $this->mPageTitle = lang('clients');
         $data['settings'] = $this->mSettings;
         $data['id'] = $id;
-        $this->load->view($this->theme . 'clients/getRepairs', $data);
+        $this->load->view($this->theme . 'technicians/getRepairs', $data);
     }
 
     // GENERATE THE AJAX TABLE CONTENT //
@@ -379,7 +379,7 @@ class Technicians extends Auth_Controller
 
         } elseif ($this->input->post('import')) {
             $this->session->set_flashdata('error', validation_errors());
-            redirect('panel/customers');
+            redirect('panel/technicians');
         }
 
         if ($this->form_validation->run() == true) {
@@ -390,7 +390,7 @@ class Technicians extends Auth_Controller
             }elseif ($updated) {
                 $this->session->set_flashdata('message', lang("customers_updated"));
             }  
-            redirect('panel/customers');
+            redirect('panel/technicians');
         } else {
             $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
             $this->load->view($this->theme . 'clients/import', $this->data);

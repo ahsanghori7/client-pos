@@ -16,16 +16,16 @@ class Technician_model extends CI_Model
     }
     public function delete_clients($id)
     {
-        $this->db->delete('clients', array('id' => $id));
+        $this->db->delete('technician', array('id' => $id));
     }
 
 
     public function insert_client($data)
     {
-        $this->db->insert('clients', $data);
+        $this->db->insert('technician', $data);
         $id = $this->db->insert_id();
         
-        $this->settings_model->addLog('add', 'customer', $id, json_encode(array(
+        $this->settings_model->addLog('add', 'technician', $id, json_encode(array(
             'data'=>$data,
         )));
         return $id;
@@ -35,8 +35,8 @@ class Technician_model extends CI_Model
     public function edit_client($id, $data)
     {
         $this->db->where('id', $id);
-        if ($this->db->update('clients', $data)) {
-             $this->settings_model->addLog('update', 'customer', $id, json_encode(array(
+        if ($this->db->update('technician', $data)) {
+             $this->settings_model->addLog('update', 'technician', $id, json_encode(array(
                 'data'=>$data,
             )));
             return TRUE;
@@ -48,7 +48,7 @@ class Technician_model extends CI_Model
     public function find_customer($id)
     {
         $data = array();
-        $query = $this->db->get_where('clients', array('id' => $id));
+        $query = $this->db->get_where('technician', array('id' => $id));
         if ($query->num_rows() > 0) {
             $data = $query->row_array();
         }
@@ -59,7 +59,7 @@ class Technician_model extends CI_Model
 
     public function getCustomerByEmail($id)
     {
-        $query = $this->db->get_where('clients', array('email' => $id));
+        $query = $this->db->get_where('technician', array('email' => $id));
         if ($query->num_rows() > 0) {
             return $query->row();
         }
@@ -69,8 +69,8 @@ class Technician_model extends CI_Model
 
 	
      public function addCustomers($data) {
-        $this->db->insert_batch('clients', $data);
-        $this->settings_model->addLog('add-batch', 'customer', $id, json_encode(array(
+        $this->db->insert_batch('technician', $data);
+        $this->settings_model->addLog('add-batch', 'technician', $id, json_encode(array(
             'data'=>$data,
         )));
         return TRUE;

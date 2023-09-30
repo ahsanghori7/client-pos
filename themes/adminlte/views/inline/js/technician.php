@@ -153,7 +153,7 @@
     
     });
     if (getUrlVars()["id"]) {
-        find_client(getUrlVars()["id"]);
+        find_technician(getUrlVars()["id"]);
         $('#view_technician').modal('show');
     }
 

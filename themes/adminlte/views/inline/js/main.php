@@ -307,6 +307,12 @@
         find_client(num);
     });
     
+    jQuery(document).on("click", ".view_tech", function () {
+        var num = jQuery(this).data("num");
+        find_technician(num);
+    });
+    
+    
     var lock = null;
     $(document).ready(function () {
         lock = new PatternLock('#patternHolder',{
@@ -1380,6 +1386,18 @@
         jQuery('#footerClient1').html('<button data-dismiss="modal" class="pull-left btn btn-default" type="button"><i class="fa fa-reply"></i> '+lang.go_back+'</button><button role="button" form="client_form" id="submit_client" class="btn btn-success" data-mode="add"><i class="fa fa-user"></i> '+lang.add + '' + lang.client_title +'</button>');
     });
     
+    jQuery(document).on("click", ".add_t", function (e) {
+        $('#techmodal').modal('show');
+        $('#tech_form').trigger("reset");
+        $('#tech_form').parsley().reset();
+        $('#showIfImage').hide();
+    
+
+        jQuery('#titclienti').html(lang.add + " " + lang.client_title);
+
+        jQuery('#footerTech1').html('<button data-dismiss="modal" class="pull-left btn btn-default" type="button"><i class="fa fa-reply"></i> '+lang.go_back+'</button><button role="button" form="tech_form" id="submit_tech" class="btn btn-success" data-mode="add"><i class="fa fa-user"></i> '+lang.add + '' + lang.client_title +'</button>');
+    });
+
     function showImage(url) {
         var img = new Image();
         img.src = url;
@@ -1477,12 +1495,12 @@
         jQuery(document).on("click", "#modify_technician", function () {
             jQuery('#titclienti').html(`${lang.edit} ${lang.client_title}`);
             var num = jQuery(this).data("num");
-            $('#client_form').trigger("reset");
-            $('#client_form').parsley().reset();
+            $('#tech_form').trigger("reset");
+            $('#tech_form').parsley().reset();
     
             jQuery.ajax({
                 type: "POST",
-                url: base_url + "panel/customers/getCustomerByID",
+                url: base_url + "panel/technicians/getCustomerByID",
                 data: "id=" + encodeURI(num) + "&token=" + token,
                 cache: false,
                 dataType: "json",
@@ -1504,7 +1522,7 @@
                         $('#view_image_in').attr('data-num', data.image);
                         $('#delete_customer_image').attr('data-num', data.id);
                     }
-                    jQuery('#footerClient1').html(`<button data-dismiss="modal" class="pull-left btn btn-default" type="button"><i class="fa fa-reply"></i> ${lang.go_back}</button><button id="submit_client" role="button" form="client_form" class="btn btn-success" data-mode="modify" data-num="${encodeURI(num)}"><i class="fa fa-save"></i> ${lang.save} ${lang.client_title}</button>`)
+                    jQuery('#footerTech1').html(`<button data-dismiss="modal" class="pull-left btn btn-default" type="button"><i class="fa fa-reply"></i> ${lang.go_back}</button><button id="submit_tech" role="button" form="tech_form" class="btn btn-success" data-mode="modify" data-num="${encodeURI(num)}"><i class="fa fa-save"></i> ${lang.save} ${lang.client_title}</button>`)
                 }
             });
         });
@@ -1619,9 +1637,99 @@
             });
         }
         return false;
-    });
-    });
+     });
+
+     $('#tech_form').parsley({
+        errorsContainer: function(pEle) {
+            var $err = pEle.$element.closest('.form-group');
+            return $err;
+        }
+    }).on('form:submit', function(event) {
+        var mode = jQuery('#submit_tech').data("mode");
+        var id = jQuery('#submit_tech').data("num");
     
+        var name = jQuery('#name1').val();
+        var company = jQuery('#company1').val();
+        var address = jQuery('#address1').val();
+        var city = jQuery('#city1').val();
+        var telephone = jQuery('#telephone').val();
+        var email = jQuery('#email1').val();
+        var comment = jQuery('#comment1').val();
+        var vat = jQuery('#vat1').val();
+        var cf = jQuery('#cf1').val();
+        
+        var url = "";
+        var formData = new FormData($('form#tech_form')[0]);
+        if (mode == "add") {
+            url = base_url + "panel/technicians/add";
+            jQuery.ajax({
+                url: url,
+                type: 'POST',
+                data: formData,
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if(data.success)  {
+                        toastr['success'](lang.add, lang.client_title + " " + name + " " + company +  lang.added);
+                        if (data.error) {
+                            toastr['error'](data.error);
+                        }
+                        setTimeout(function () {
+                            $('#techmodal').modal('hide');
+                            jQuery('#client_name').append('<option value="'+data.id+'">'+name+' '+company+'</option>');
+                            if ($('#reparationmodal').hasClass('show')) {
+                                $('#client_name').val(data.id);
+                                $("#client_name").select2();
+                            }else{
+                                find_technician(data.id);
+                                $('#dynamic-table').DataTable().ajax.reload();
+                                $('#view_client').modal('show');
+                            }
+                        }, 500);
+                    }else{
+                        toastr['error'](data.error);
+
+                    }
+
+                    
+                }
+            });
+        } else {
+            formData.append('id', id);
+            url = base_url + "panel/technicians/edit";
+            jQuery.ajax({
+                url: url,
+                type: 'POST',
+                data: formData,
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if(data.success)  {
+
+                        toastr['success'](lang.edit, lang.client_title + ": " + name + " " + company + lang.updated);
+                        if (data.error) {
+                            toastr['error'](data.error);
+                        }
+                        setTimeout(function () {
+                            $('#techmodal').modal('hide');
+                            find_client(id);
+                            $('#dynamic-table').DataTable().ajax.reload();
+                            $('#view_client').modal('show');
+                        }, 500);
+                    }else{
+                        toastr['error'](data.error);
+
+                    }
+                }
+            });
+        }
+        return false;
+     });
+    });
     
     jQuery(document).on("click", "#status_change_inline", function () {
         var num = jQuery(this).data("num");
@@ -1775,7 +1883,76 @@
     }
     
 
-
+    var oTable;
+    function find_technician(num) {
+        jQuery.ajax({
+            type: "POST",
+            url: base_url + "panel/technicians/getCustomerByID",
+            data: "id=" + encodeURI(num) + "&token=" + token,
+            cache: false,
+            dataType: "json",
+            success: function (data) {
+                if (typeof data.name === 'undefined') {
+                    $('#view_tech').modal('hide');
+                    toastr['error']('No Client', '');
+                } else {
+                    jQuery('#titoloclienti').html('Client: ' + data.name);
+                    jQuery( ".flatb.add" ).data( "name", data.name+' '+data.company);
+                    jQuery( ".flatb.add" ).data( "id_name", data.id);
+                    jQuery( ".flatb.lista" ).data( "name", data.name+' '+data.company);
+                    jQuery('#v_name').html(data.name);
+                    jQuery('#v_company').html(data.company);
+                    jQuery('#v_address').html(data.address);
+                    jQuery('#v_city').html(data.city)
+                    jQuery('#v_telephone').html(data.telephone);
+                    jQuery('#v_email').html(data.email)
+                    jQuery('#v_comment').html(data.comment);
+                    jQuery('#v_vat').html(data.vat);
+                    jQuery('#v_postal_code').html(data.postal_code);
+                    jQuery('#v_cf').html(data.cf);
+    
+                    if ($.fn.DataTable.isDataTable('#dynamic-table2') ) {
+                        $('#dynamic-table2').DataTable().destroy();
+                    }
+    
+                    var tableCR = $('#dynamic-table2').dataTable({
+                        "aaSorting": [[3, "asc"]],
+                        "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+                        "iDisplayLength": parseInt(site.settings.rows_per_page),
+                        'bProcessing': true, 'bServerSide': true,
+                        'sAjaxSource': site.base_url + 'panel/reparation/getAllReparations/'+data.id,
+                        'fnServerData': function (sSource, aoData, fnCallback) {
+                            aoData.push({
+                                "name": get_csrf_token_name,
+                                "name": get_csrf_hash
+                            });
+                            $.ajax({'dataType': 'json', 'type': 'POST', 'url': sSource, 'data': aoData, 'success': fnCallback});
+                        }, 
+                        "aoColumns": [
+                            {"mRender": reparationID_link},
+                            null,
+                            null,
+                            null,
+                            null,
+                            {"mRender": status_},
+                            null,
+                            {"mRender": update_by},
+                            {"mRender": formatMyDecimal},
+                        ],
+                    });
+    
+                    var string = "<button data-dismiss=\"modal\" class=\"btn btn-default\" type=\"button\"><i class=\"fa fa-reply\"></i> "+lang.go_back+"</button>";
+                    <?php if($this->Admin || $GP['customers-edit']): ?>
+                        string += "<button data-dismiss=\"modal\" id=\"modify_client\" href=\"#clientmodal\" data-toggle=\"modal\" data-num=\"" + encodeURI(num) + "\" class=\"btn btn-success\"><i class=\"fa fa-pencil\"></i> "+lang.modify+"</button>";
+                    <?php endif; ?>
+                    <?php if($this->Admin || $GP['customers-delete']): ?>
+                        string += "<button id=\"delete_client\" data-dismiss=\"modal\" data-num=\"" + encodeURI(num) + "\" class=\"btn btn-danger\" type=\"button\"><i class=\"fa fa-trash-o \"></i> "+lang.delete+"</button>";
+                    <?php endif; ?>
+                    jQuery('#footerClient').html(string);
+                }
+            }
+        });
+    }
 
 
 

@@ -681,6 +681,7 @@ $lang['event_updated'] = 'Updated Successfully';
 $lang['event_removed'] = 'Event Removed';
 $lang['event_remove_r_u_sure'] = 'Are you sure?';
 $lang['view_client'] = 'View Client';
+$lang['view_technician'] = 'View Technician';
 $lang['edit_client'] = 'Edit Client';
 $lang['delete_client'] = 'Delete Client';
 $lang['view_supplier'] = 'View Supplier';

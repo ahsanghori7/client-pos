@@ -1,7 +1,7 @@
 
 
 <?php if($this->Admin || $GP['customers-add']): ?>
-    <button href="#clientmodal" class="add_c btn btn-primary">
+    <button href="#techmodal" class="add_t btn btn-primary">
         <i class="fa fa-plus-circle"></i> <?= lang('add'); ?> <?= lang('technician_title'); ?>
     </button>
 <?php endif; ?>

@@ -42,8 +42,8 @@ class Technicians extends Auth_Controller
         $this->repairer->checkPermissions('index');
         $this->load->library('datatables');
         $this->datatables
-            ->select('clients.id as id, clients.name as name, company, address, clients.email as email, clients.telephone as telephone, image, (SELECT COUNT(reparation.id) FROM reparation WHERE reparation.client_id=clients.id) as total_repairs, (SELECT SUM(reparation.grand_total) FROM reparation WHERE reparation.client_id=clients.id) as sum')
-            ->from('clients');
+            ->select('technician.id as id, technician.name as name, company, address, technician.email as email, technician.telephone as telephone, image, (SELECT COUNT(reparation.id) FROM reparation WHERE reparation.assigned_to=technician.id) as total_repairs, (SELECT SUM(reparation.grand_total) FROM reparation WHERE reparation.assigned_to=technician.id) as sum')
+            ->from('technician');
 
 
         $actions = '<div class="text-center"><div class="btn-group dropleft">'
@@ -51,14 +51,14 @@ class Technicians extends Auth_Controller
             . ('actions') . ' <span class="caret"></span></button>
         <ul class="dropdown-menu" role="menu">';
 
-        $actions .= "<a data-dismiss='modal' class='view_client dropdown-item' href='#view_technician' data-toggle='modal' data-num='$1'><i class='fas fa-check'></i> ".lang('view_client')."</a>";
+        $actions .= "<a data-dismiss='modal' class='view_tech dropdown-item' href='#view_technician' data-toggle='modal' data-num='$1'><i class='fas fa-check'></i> ".lang('view_technician')."</a>";
         
 
 
-        $actions .= "<a class='dropdown-item' data-dismiss='modal' id='modify_technician' href='#clientmodal' data-toggle='modal' data-num='$1'><i class='fas fa-edit'></i> ".lang('edit_client')."</a>";
+        $actions .= "<a class='dropdown-item' data-dismiss='modal' id='modify_technician' href='#techmodal' data-toggle='modal' data-num='$1'><i class='fas fa-edit'></i> ".lang('edit_technician')."</a>";
 
 
-        $actions .= "<a class='dropdown-item' id='delete_technician' data-num='$1'><i class='fas fa-trash'></i> ".lang('delete_client')."</a>";
+        $actions .= "<a class='dropdown-item' id='delete_technician' data-num='$1'><i class='fas fa-trash'></i> ".lang('delete_technician')."</a>";
         $actions .= "<a class='dropdown-item' id='view_image' data-num='$2'><i class='fas fa-image'></i> ".lang('view_image')."</a>";
         $actions .= '</ul></div>';
 
@@ -109,7 +109,7 @@ class Technicians extends Auth_Controller
         $cf = $this->input->post('cf', true) ?? '';
 		
 
-        $this->form_validation->set_rules('telephone', lang('client_telephone'), 'is_unique[clients.telephone]');
+        $this->form_validation->set_rules('telephone', lang('client_telephone'), 'is_unique[technician.telephone]');
 
         if ($this->form_validation->run() == true) {
 
@@ -153,7 +153,7 @@ class Technicians extends Auth_Controller
                 }
             }
 
-            $id = $this->Customers_model->insert_client($data);
+            $id = $this->Technician_model->insert_client($data);
             echo $this->repairer->send_json(array('success' => true, 'id'=>$id, 'error'=>$error));
         }else{
             echo $this->repairer->send_json(array('success' => false, 'error'=>validation_errors()));
@@ -179,11 +179,11 @@ class Technicians extends Auth_Controller
         $cf = $this->input->post('cf', true);
 
 
-        $customer = $this->Customers_model->find_customer($id);
+        $customer = $this->Technician_model->find_customer($id);
 
         $this->form_validation->set_rules('name', lang('client_name'), 'required');
         if ($customer['telephone'] !== $this->input->post('telephone')) {
-            $this->form_validation->set_rules('telephone', lang('client_telephone'), 'is_unique[clients.telephone]');
+            $this->form_validation->set_rules('telephone', lang('client_telephone'), 'is_unique[technician.telephone]');
         }
 
         if ($this->form_validation->run() == true) {
@@ -221,7 +221,7 @@ class Technicians extends Auth_Controller
                     }
                 }
             }
-            $this->Customers_model->edit_client($id, $data);
+            $this->Technician_model->edit_client($id, $data);
             echo $this->repairer->send_json(array('success' => true, 'id'=>$id, 'error'=>$error));
         }else{
             echo $this->repairer->send_json(array('success' => false, 'error'=>validation_errors()));
@@ -234,7 +234,7 @@ class Technicians extends Auth_Controller
     {
         $this->repairer->checkPermissions();
 		$id = $this->security->xss_clean($this->input->post('id', true));
-        $data = $this->Customers_model->delete_clients($id);
+        $data = $this->Technician_model->delete_clients($id);
         echo json_encode($data);
     }
 
@@ -242,7 +242,7 @@ class Technicians extends Auth_Controller
     {
         $id = $this->security->xss_clean($this->input->post('id', true));
         $this->db->where('id', $id);
-        $this->db->update('clients', array('image'=>null));
+        $this->db->update('technician', array('image'=>null));
          $this->settings_model->addLog('delete-image', 'customer', $id, json_encode(array(
             
         )));
@@ -252,7 +252,7 @@ class Technicians extends Auth_Controller
     public function getCustomerByID()
     {
         $id = $this->security->xss_clean($this->input->post('id', true));
-		$data = $this->Customers_model->find_customer($id);
+		$data = $this->Technician_model->find_customer($id);
 		$token = $this->input->post('token', true);
         echo json_encode($data);
     }
@@ -261,7 +261,7 @@ class Technicians extends Auth_Controller
 
         $q = $this->db
             ->select('id, name, company, address, email, telephone, image, city, postal_code, vat, comment')
-            ->from('clients')->get();
+            ->from('technician')->get();
 
         $customers = array();
         if ($q->num_rows() > 0) {
@@ -338,7 +338,7 @@ class Technicians extends Auth_Controller
                 if (!$this->upload->do_upload('csv_file')) {
                     $error = $this->upload->display_errors();
                     $this->session->set_flashdata('error', $error);
-                    redirect("panel/customers");
+                    redirect("panel/technicians");
                 }
                 $csv = $this->upload->file_name;
                 $arrResult = array();
@@ -366,9 +366,9 @@ class Technicians extends Auth_Controller
                 foreach ($final as $record) {
                     $record['date'] = date('Y-m-d');
                     if ($record['email'] !== '') {
-                        if ($client_ = $this->Customers_model->getCustomerByEmail($record['email'])) {
+                        if ($client_ = $this->Technician_model->getCustomerByEmail($record['email'])) {
                             $updated = true;
-                            $this->db->where('id', $client_->id)->update('clients', $record);
+                            $this->db->where('id', $client_->id)->update('technician', $record);
                             continue;
                         }
                     }
@@ -384,7 +384,7 @@ class Technicians extends Auth_Controller
 
         if ($this->form_validation->run() == true) {
             if (!empty($data)) {
-                if ($this->Customers_model->addCustomers($data)) {
+                if ($this->Technician_model->addCustomers($data)) {
                     $this->session->set_flashdata('message', lang("customers_added"));
                 }
             }elseif ($updated) {
@@ -393,7 +393,7 @@ class Technicians extends Auth_Controller
             redirect('panel/technicians');
         } else {
             $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
-            $this->load->view($this->theme . 'clients/import', $this->data);
+            $this->load->view($this->theme . 'technicians/import', $this->data);
         }
     }
 
@@ -419,7 +419,7 @@ class Technicians extends Auth_Controller
                     $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
                     $sheet = $spreadsheet->getActiveSheet();
 
-                    $sheet->setTitle('Customers');
+                    $sheet->setTitle('Technicians');
                     $sheet->SetCellValue('A1', lang('client_name'));
                     $sheet->SetCellValue('B1', lang('client_company'));
                     $sheet->SetCellValue('C1', lang('client_address'));
@@ -433,7 +433,7 @@ class Technicians extends Auth_Controller
 
                     $row = 2;
                     foreach ($_POST['val'] as $id) {
-                        $client = $this->Customers_model->find_customer($id);
+                        $client = $this->Technician_model->find_customer($id);
                         $sheet->SetCellValue('A' . $row, $client['name']);
                         $sheet->SetCellValue('B' . $row, $client['company']);
                         $sheet->SetCellValue('C' . $row, $client['address']);
@@ -454,7 +454,7 @@ class Technicians extends Auth_Controller
                     $sheet->getColumnDimension('F')->setWidth(10);
                     $sheet->getColumnDimension('G')->setWidth(10);
                     $sheet->getParent()->getDefaultStyle()->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
-                    $filename = 'customers' . date('Y_m_d_H_i_s');
+                    $filename = 'technicians' . date('Y_m_d_H_i_s');
                     if ($this->input->post('form_action') == 'export_excel') {
                         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
                         header('Content-Disposition: attachment;filename="'.$filename.'.xlsx"');
@@ -486,7 +486,7 @@ class Technicians extends Auth_Controller
                     redirect($_SERVER["HTTP_REFERER"]);
                 }
             } else {
-                $this->session->set_flashdata('error', $this->lang->line("no_customer_selected"));
+                $this->session->set_flashdata('error', "no technician selected");
                 redirect($_SERVER["HTTP_REFERER"]);
             }
         } else {
@@ -503,7 +503,7 @@ class Technicians extends Auth_Controller
             $this->db->where("(name LIKE '%" . $term . "%' OR telephone LIKE '%" . $term . "%' OR  concat(name, ' ', telephone) LIKE '%" . $term . "%')");
         }
         $this->db->select('id, name, telephone');
-        $q = $this->db->get('clients');
+        $q = $this->db->get('technician');
 
         $data = array(); 
         if ($q->num_rows() > 0) {
@@ -511,7 +511,7 @@ class Technicians extends Auth_Controller
                 $data[] = array('id' => $client->id, 'text' => "$client->name ". preg_replace('~.*(\d{3})[^\d]{0,7}(\d{3})[^\d]{0,7}(\d{4}).*~', '($1) $2-$3', $client->telephone) );              
             } 
         } else {
-           $data[] = array('id' => '0', 'text' => 'No Client Found');
+           $data[] = array('id' => '0', 'text' => 'No Technician Found');
         }
         echo json_encode($data);
     }

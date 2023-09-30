@@ -114,7 +114,7 @@
                          
                         </select>
                          <div class="input-group-append">
-                          <span  id="add_client" class="input-group-text add_c">
+                          <span  id="add_client" class="input-group-text add_t">
                           <i class="fa fa-user-plus"></i>
                           </span>
                         </div>
@@ -624,7 +624,7 @@
 
 
 <!-- ============= MODAL View CLient ============= -->
-<div class="modal fade" id="view_client" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="view_technician" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
@@ -691,12 +691,12 @@
           </table>
         </div>
       </div>
-      <div class="modal-footer" id="footerClient"></div>
+      <div class="modal-footer" id="footerTech"></div>
     </div>
   </div>
 </div>
 <!-- ============= MODAL MODIFY CLIENTI ============= -->
-<div class="modal fade" id="clientmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="techmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -706,11 +706,11 @@
         </button>
       </div>
       <div class="modal-body">
-        <form id="client_form" class="col s12" data-parsley-validate">
+        <form id="tech_form" class="col s12" data-parsley-validate">
           <div class="row">
             <div class="col-md-12 col-lg-6 input-field">
               <div class="form-group">
-                <?= lang('client_name', 'name1'); ?>
+                Technician Name
                 <div class="input-group mb-3">
                   <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fa  fa-user"></i></span>
@@ -846,7 +846,7 @@
           </div>
         </form>
       </div>
-      <div class="modal-footer" id="footerClient1"></div>
+      <div class="modal-footer" id="footerTech1"></div>
     </div>
   </div>
 </div>

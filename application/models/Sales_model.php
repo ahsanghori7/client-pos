@@ -222,6 +222,7 @@ class Sales_model extends CI_Model
     public function addReturn($data, $items)
     {
         $q = $this->db->get_where('sales_return', array('sale_id' => $data['sale_id']), 1);
+
         if ($q->num_rows() > 0) {
             $id = $q->row()->return_id;
 
@@ -231,6 +232,9 @@ class Sales_model extends CI_Model
                     $qty = ($p->row()->quantity + $item['quantity']);
                     $remain = ($p->row()->quantity_balance - $item['quantity']);
                     $this->db->update('return_items', array('quantity' => ($qty), 'quantity_balance' => $remain), array('return_id' => $id, 'product_id' => $item['product_id']));
+                    $inventory_old = $this->db->get_where('inventory', array('id' => $item['product_id']), 1);
+                    $quantity = $inventory_old->row()->quantity;
+                    $this->db->update('inventory', array('quantity' => ($quantity+$item['quantity'])), array('id' => $item['product_id']));             
                 }else{
                     $item['return_id'] = $id;
                     $this->db->insert('return_items', $item);
@@ -242,9 +246,11 @@ class Sales_model extends CI_Model
             if ($this->db->insert('sales_return', $data)) {
                 $id = $this->db->insert_id();
                 foreach ($items as $item) {
+                    $inventory_old = $this->db->get_where('inventory', array('id' => $item['product_id']), 1);
+                    $quantity = $inventory_old->row()->quantity;
                     $item['return_id'] = $id;
                     $this->db->insert('return_items', $item);
-                    // $this->db->update('inventory', array('cost' => $item['unit_cost']), array('id' => $item['product_id']));
+                    $this->db->update('inventory', array('quantity' => ($quantity+$item['quantity'])), array('id' => $item['product_id']));
                 }
     
                return true;

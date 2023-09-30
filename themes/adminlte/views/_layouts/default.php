@@ -71,6 +71,7 @@
 	</div>
 
 	<?php $this->load->view($this->theme . 'client_js');?>
+	<?php $this->load->view($this->theme . 'tech_js');?>
 
 	<?php // Footer ?>
 	<?php $this->load->view($this->theme . '_partials/footer'); ?>

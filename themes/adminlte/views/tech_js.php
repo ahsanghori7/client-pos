@@ -114,7 +114,7 @@
                          
                         </select>
                          <div class="input-group-append">
-                          <span  id="add_client" class="input-group-text add_c">
+                          <span  id="add_client" class="input-group-text add_t">
                           <i class="fa fa-user-plus"></i>
                           </span>
                         </div>
@@ -624,12 +624,12 @@
 
 
 <!-- ============= MODAL View CLient ============= -->
-<div class="modal fade" id="view_client" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="view_technician" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title">
-          <div id="titoloclienti"></div>
+          <div id="titolotechi"></div>
         </h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
       </div>
@@ -637,16 +637,16 @@
         <div class="panel-body">
           <div class="row">
             <div class="col-md-12 col-lg-6 bio-row">
-              <p><span class="bold"><i class="fa fa-user"></i> <?= lang('client_name'); ?> </span><span id="v_name"></span></p>
+              <p><span class="bold"><i class="fa fa-user"></i> <?= lang('client_name'); ?> </span><span id="t_name"></span></p>
             </div>
             <div class="col-md-12 col-lg-6 bio-row">
-              <p><span class="bold"><i class="fa fa-user"></i> <?= lang('client_company'); ?> </span><span id="v_company"></span></p>
+              <p><span class="bold"><i class="fa fa-user"></i> <?= lang('client_company'); ?> </span><span id="t_company"></span></p>
             </div>
             <div class="col-md-12 col-lg-6 bio-row">
-              <p><span class="bold"><i class="fa fa-road"></i> <?= lang('client_address'); ?></span><span id="v_address"></span></p>
+              <p><span class="bold"><i class="fa fa-road"></i> <?= lang('client_address'); ?></span><span id="t_address"></span></p>
             </div>
             <div class="col-md-12 col-lg-6 bio-row">
-              <p><span class="bold"><i class="fa fa-globe"></i><?= lang('client_city'); ?></span><span id="v_city"></span></p>
+              <p><span class="bold"><i class="fa fa-globe"></i><?= lang('client_city'); ?></span><span id="t_city"></span></p>
             </div>
             <div class="col-md-12 col-lg-6 bio-row">
               <p>
@@ -658,23 +658,23 @@
               </p>
             </div>
             <div class="col-md-12 col-lg-6 bio-row">
-              <p><span class="bold"><i class="fa fa-phone"></i> <?= lang('client_telephone'); ?> </span><span id="v_telephone"></span></p>
+              <p><span class="bold"><i class="fa fa-phone"></i> <?= lang('client_telephone'); ?> </span><span id="t_telephone"></span></p>
             </div>
             <div class="col-md-12 col-lg-6 bio-row">
-              <p><span class="bold"><i class="fa fa-envelope"></i> <?= lang('client_email'); ?> </span><span id="v_email"></span></p>
+              <p><span class="bold"><i class="fa fa-envelope"></i> <?= lang('client_email'); ?> </span><span id="t_email"></span></p>
             </div>
             <div class="col-md-12 col-lg-6 bio-row">
-              <p><span class="bold"><i class="fa fa-barcode"></i> <?= lang('client_vat'); ?> </span><span id="v_vat"></span></p>
+              <p><span class="bold"><i class="fa fa-barcode"></i> <?= lang('client_vat'); ?> </span><span id="t_vat"></span></p>
             </div>
             <div class="col-md-12 col-lg-6 bio-row">
-              <p><span class="bold"><i class="fa fa-quote-left"></i> <?= lang('client_ssn'); ?> </span><span id="v_cf"></span></p>
+              <p><span class="bold"><i class="fa fa-quote-left"></i> <?= lang('client_ssn'); ?> </span><span id="t_cf"></span></p>
             </div>
           </div>
           <div class="form-group commenti">
             <label><?= lang('client_comment'); ?></label>
             <textarea class="form-control" id="v_comment" rows="6" disabled></textarea>
           </div>
-          <table class="display compact table table-bordered table-striped" id="dynamic-table2">
+          <table class="display compact table table-bordered table-striped" id="dynamic-table22">
             <thead>
               <tr>
                 <th><?= lang('reparation_code'); ?></th>
@@ -691,12 +691,12 @@
           </table>
         </div>
       </div>
-      <div class="modal-footer" id="footerClient"></div>
+      <div class="modal-footer" id="footerTech"></div>
     </div>
   </div>
 </div>
 <!-- ============= MODAL MODIFY CLIENTI ============= -->
-<div class="modal fade" id="clientmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="techmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -706,16 +706,16 @@
         </button>
       </div>
       <div class="modal-body">
-        <form id="client_form" class="col s12" data-parsley-validate">
+        <form id="tech_form" class="col s12" data-parsley-validate">
           <div class="row">
             <div class="col-md-12 col-lg-6 input-field">
               <div class="form-group">
-                <?= lang('client_name', 'name1'); ?>
+                Technician Name
                 <div class="input-group mb-3">
                   <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fa  fa-user"></i></span>
                   </div>
-                  <input id="name1" name="name" type="text" class="validate form-control" required>
+                  <input id="name2" name="name" type="text" class="validate form-control" required>
                 </div>
               </div>
             </div>
@@ -726,7 +726,7 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fa  fa-user"></i></span>
                   </div>
-                  <input name="company" id="company1" type="text" class="validate form-control">
+                  <input name="company" id="company2" type="text" class="validate form-control">
                 </div>
               </div>
             </div>
@@ -738,7 +738,7 @@
                     <span class="input-group-text"><i class="fa  fa-map-marker"></i></span>
                   </div>
                   <div id="locationField">
-                    <input id="autocomplete" class="form-control" placeholder="<?=lang('enter_address');?>"
+                    <input id="autocomplete2" class="form-control" placeholder="<?=lang('enter_address');?>"
                       onFocus="geolocate()" type="text"></input>
                   </div>
                 </div>
@@ -753,7 +753,7 @@
                   </div>
                   <input type="hidden" class="field form-control input-xs" id="street_number">
                   <input type="hidden" class="field form-control input-xs" id="administrative_area_level_1">
-                  <input name="address"  id="route" type="text" class="validate form-control input-xs">
+                  <input name="address"  id="route2" type="text" class="validate form-control input-xs">
                 </div>
               </div>
             </div>
@@ -764,7 +764,7 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fa  fa-globe"></i></span>
                   </div>
-                  <input name="city" id="locality" type="text" class="validate form-control">
+                  <input name="city" id="locality2" type="text" class="validate form-control">
                 </div>
               </div>
             </div>
@@ -775,7 +775,7 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fa  fa-globe"></i></span>
                   </div>
-                  <input name="postal_code" id="postal_code" type="text" class="validate form-control">
+                  <input name="postal_code" id="postal_code2" type="text" class="validate form-control">
                 </div>
               </div>
             </div>
@@ -786,7 +786,7 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fa  fa-phone"></i></span>
                   </div>
-                  <input id="telephone" name="telephone" type="text" class="validate form-control" data-mask="(999) 999-9999">
+                  <input id="telephone2" name="telephone" type="text" class="validate form-control" data-mask="(999) 999-9999">
                 </div>
               </div>
             </div>
@@ -797,7 +797,7 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fa  fa-envelope"></i></span>
                   </div>
-                  <input id="email1" name="email" type="email" class="validate form-control">
+                  <input id="email2" name="email" type="email" class="validate form-control">
                 </div>
               </div>
             </div>
@@ -808,7 +808,7 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fa  fa-envelope"></i></span>
                   </div>
-                  <input name="vat" id="vat1" class="validate form-control">
+                  <input name="vat" id="vat2" class="validate form-control">
                 </div>
               </div>
             </div>
@@ -816,7 +816,7 @@
               <div class="form-group">
                 <?= lang('client_ssn', 'cf1'); ?>
                 <div class="input-group mb-3">
-                  <input name="vat" id="vat1" class="validate form-control">
+                  <input name="cf" id="cf2" class="validate form-control">
                 </div>
               </div>
             </div>
@@ -827,12 +827,12 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fa  fa-upload"></i></span>
                   </div>
-                  <input id="image" type="file" data-browse-label="Browse" name="image" data-show-upload="false" data-show-preview="false" accept="image/*" class="form-control file">
+                  <input id="image2" type="file" data-browse-label="Browse" name="image" data-show-upload="false" data-show-preview="false" accept="image/*" class="form-control file">
                 </div>
               </div>
             </div>
             <div class="col-lg-4 input-field">
-              <div id="showIfImage" style="display: none;">
+              <div id="showIfImage2" style="display: none;">
                 <button class="btn btn-primary" id="view_image_in" data-num><i class="fa fa-eye"></i></button>
                 <button class="btn btn-danger" id="delete_customer_image" data-num><i class="fa fa-trash-o"></i> <?=lang('delete')?></button>
               </div>
@@ -840,13 +840,13 @@
             <div class="col-md-12 input-field">
               <div class="form-group">
                 <?= lang('client_comment', 'comment1'); ?> <i id="add_timestamp" class="fa fa-calendar"></i>
-                <textarea class="form-control" id="comment1" name="comment" rows="6"></textarea>
+                <textarea class="form-control" id="comment2" name="comment" rows="6"></textarea>
               </div>
             </div>
           </div>
         </form>
       </div>
-      <div class="modal-footer" id="footerClient1"></div>
+      <div class="modal-footer" id="footerTech1"></div>
     </div>
   </div>
 </div>

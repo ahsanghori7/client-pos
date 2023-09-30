@@ -37,9 +37,9 @@ class Welcome extends Auth_Controller {
 	public function getTechReport()
 	{
 		$q = $this->db
-			->select('CONCAT(users.first_name, " ",users.last_name) as name,first_name, last_name, COUNT(reparation.id) as repair_count, SUM(grand_total) as total_revenue')
-			->join('users', 'reparation.assigned_to=users.id','left')
-			->where('users.id !=', null)
+			->select('technician.name as name, COUNT(reparation.id) as repair_count, SUM(grand_total) as total_revenue')
+			->join('technician', 'reparation.assigned_to=technician.id','left')
+			->where('technician.id !=', null)
 			->group_by('reparation.assigned_to')
 			->get('reparation');
 		if ($q->num_rows() > 0) {

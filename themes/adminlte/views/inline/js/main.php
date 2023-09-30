@@ -1505,20 +1505,20 @@
                 cache: false,
                 dataType: "json",
                 success: function (data) {
-                    jQuery('#name1').val(data.name);
-                    jQuery('#company1').val(data.company);
-                    jQuery('#route').val(data.address);
-                    jQuery('#locality').val(data.city)
-                    jQuery('#telephone').val(data.telephone);
-                    jQuery('#email1').val(data.email)
-                    jQuery('#comment1').val(data.comment);
-                    jQuery('#postal_code').val(data.postal_code);
-                    jQuery('#vat1').val(data.vat);
-                    jQuery('#cf1').val(data.cf);
+                    jQuery('#name2').val(data.name);
+                    jQuery('#company2').val(data.company);
+                    jQuery('#route2').val(data.address);
+                    jQuery('#locality2').val(data.city)
+                    jQuery('#telephone2').val(data.telephone);
+                    jQuery('#email2').val(data.email)
+                    jQuery('#comment2').val(data.comment);
+                    jQuery('#postal_code2').val(data.postal_code);
+                    jQuery('#vat2').val(data.vat);
+                    jQuery('#cf2').val(data.cf);
     
-                    $('#showIfImage').hide();
+                    $('#showIfImage2').hide();
                     if (data.image) {
-                        $('#showIfImage').show();
+                        $('#showIfImage2').show();
                         $('#view_image_in').attr('data-num', data.image);
                         $('#delete_customer_image').attr('data-num', data.id);
                     }
@@ -1685,7 +1685,7 @@
                             }else{
                                 find_technician(data.id);
                                 $('#dynamic-table').DataTable().ajax.reload();
-                                $('#view_client').modal('show');
+                                $('#view_technician').modal('show');
                             }
                         }, 500);
                     }else{
@@ -1718,7 +1718,7 @@
                             $('#techmodal').modal('hide');
                             find_client(id);
                             $('#dynamic-table').DataTable().ajax.reload();
-                            $('#view_client').modal('show');
+                            $('#view_technician').modal('show');
                         }, 500);
                     }else{
                         toastr['error'](data.error);
@@ -1893,29 +1893,29 @@
             dataType: "json",
             success: function (data) {
                 if (typeof data.name === 'undefined') {
-                    $('#view_tech').modal('hide');
-                    toastr['error']('No Client', '');
+                    $('#view_technician').modal('hide');
+                    toastr['error']('No Technician', '');
                 } else {
-                    jQuery('#titoloclienti').html('Client: ' + data.name);
+                    jQuery('#titolotechi').html('Technician: ' + data.name);
                     jQuery( ".flatb.add" ).data( "name", data.name+' '+data.company);
                     jQuery( ".flatb.add" ).data( "id_name", data.id);
                     jQuery( ".flatb.lista" ).data( "name", data.name+' '+data.company);
-                    jQuery('#v_name').html(data.name);
-                    jQuery('#v_company').html(data.company);
-                    jQuery('#v_address').html(data.address);
-                    jQuery('#v_city').html(data.city)
-                    jQuery('#v_telephone').html(data.telephone);
-                    jQuery('#v_email').html(data.email)
-                    jQuery('#v_comment').html(data.comment);
-                    jQuery('#v_vat').html(data.vat);
-                    jQuery('#v_postal_code').html(data.postal_code);
-                    jQuery('#v_cf').html(data.cf);
-    
-                    if ($.fn.DataTable.isDataTable('#dynamic-table2') ) {
-                        $('#dynamic-table2').DataTable().destroy();
+                    jQuery('#t_name').html(data.name);
+                    jQuery('#t_company').html(data.company);
+                    jQuery('#t_address').html(data.address);
+                    jQuery('#t_city').html(data.city)
+                    jQuery('#t_telephone').html(data.telephone);
+                    jQuery('#t_email').html(data.email)
+                    jQuery('#t_comment').html(data.comment);
+                    jQuery('#t_vat').html(data.vat);
+                    jQuery('#t_postal_code').html(data.postal_code);
+                    jQuery('#t_cf').html(data.cf);
+                    
+                    if ($.fn.DataTable.isDataTable('#dynamic-table22') ) {
+                        $('#dynamic-table22').DataTable().destroy();
                     }
     
-                    var tableCR = $('#dynamic-table2').dataTable({
+                    var tableCR = $('#dynamic-table22').dataTable({
                         "aaSorting": [[3, "asc"]],
                         "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
                         "iDisplayLength": parseInt(site.settings.rows_per_page),
@@ -1943,12 +1943,12 @@
     
                     var string = "<button data-dismiss=\"modal\" class=\"btn btn-default\" type=\"button\"><i class=\"fa fa-reply\"></i> "+lang.go_back+"</button>";
                     <?php if($this->Admin || $GP['customers-edit']): ?>
-                        string += "<button data-dismiss=\"modal\" id=\"modify_client\" href=\"#clientmodal\" data-toggle=\"modal\" data-num=\"" + encodeURI(num) + "\" class=\"btn btn-success\"><i class=\"fa fa-pencil\"></i> "+lang.modify+"</button>";
+                        string += "<button data-dismiss=\"modal\" id=\"modify_tech\" href=\"#techmodal\" data-toggle=\"modal\" data-num=\"" + encodeURI(num) + "\" class=\"btn btn-success\"><i class=\"fa fa-pencil\"></i> "+lang.modify+"</button>";
                     <?php endif; ?>
                     <?php if($this->Admin || $GP['customers-delete']): ?>
                         string += "<button id=\"delete_client\" data-dismiss=\"modal\" data-num=\"" + encodeURI(num) + "\" class=\"btn btn-danger\" type=\"button\"><i class=\"fa fa-trash-o \"></i> "+lang.delete+"</button>";
                     <?php endif; ?>
-                    jQuery('#footerClient').html(string);
+                    jQuery('#footerTech').html(string);
                 }
             }
         });

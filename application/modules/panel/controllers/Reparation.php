@@ -28,7 +28,6 @@ class Reparation extends Auth_Controller
 
         $this->data['pending_total'] = $this->reparation_model->getTotalofRepairs();
         $this->data['completed_total'] = $this->reparation_model->getTotalofRepairs(1);
-        $this->data['technicians_list'] = $this->technician_model->getTechnician();
 
         $this->repairer->checkPermissions('index', NULL, 'repair');
        

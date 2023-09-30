@@ -28,7 +28,7 @@ class Reparation extends Auth_Controller
 
         $this->data['pending_total'] = $this->reparation_model->getTotalofRepairs();
         $this->data['completed_total'] = $this->reparation_model->getTotalofRepairs(1);
-
+        $this->data['technicians_list'] = $this->technician_model->getTechnician();
         $this->repairer->checkPermissions('index', NULL, 'repair');
        
         $this->render('reparation/index');
@@ -119,10 +119,10 @@ class Reparation extends Auth_Controller
             
             
             $this->datatables
-                ->select('reparation.id as id, reparation.code as code, CONCAT(client_id, "___", reparation.name) as cname, reparation.imei as imei, reparation.telephone, defect, manufacturer, model_name, date_opening, date_closing, if(status > 0, CONCAT(status.label, "____", status.bg_color, "____", status.fg_color, "____", status.id, "____" ,reparation.id), "cancelled") as status, b.name as assigned, a.first_name, (SELECT CONCAT(first_name, " ", last_name) FROM users WHERE reparation.updated_by = users.id) as modified_by, (SELECT COUNT(attachments.id) FROM attachments WHERE reparation_id=reparation.id) as attached, grand_total, ( SELECT GROUP_CONCAT(CONCAT(payments.paid_by, "____", payments.amount)) FROM payments where payments.reparation_id = reparation.id) as payments,"actions" as actions, warranty, clients.email as email')
+                ->select('reparation.id as id, reparation.code as code, CONCAT(client_id, "___", reparation.name) as cname, reparation.imei as imei, reparation.telephone, defect, manufacturer, model_name, date_opening, date_closing, if(status > 0, CONCAT(status.label, "____", status.bg_color, "____", status.fg_color, "____", status.id, "____" ,reparation.id), "cancelled") as status, CONCAT(b.first_name, " ", b.last_name) as assigned, a.first_name, (SELECT CONCAT(first_name, " ", last_name) FROM users WHERE reparation.updated_by = users.id) as modified_by, (SELECT COUNT(attachments.id) FROM attachments WHERE reparation_id=reparation.id) as attached, grand_total, ( SELECT GROUP_CONCAT(CONCAT(payments.paid_by, "____", payments.amount)) FROM payments where payments.reparation_id = reparation.id) as payments,"actions" as actions, warranty, clients.email as email')
                 ->join('status', 'status.id=reparation.status', 'left')
                 ->join('users a', 'a.id=reparation.created_by', 'left')
-                ->join('technician b', 'b.id=reparation.assigned_to', 'left')
+                ->join('users b', 'b.id=reparation.assigned_to', 'left')
                 ->join('clients', 'clients.id=reparation.client_id', 'left')
                 ->from('reparation');
 
@@ -158,62 +158,6 @@ class Reparation extends Auth_Controller
             $actions .= '</ul></div>';
             $this->datatables->edit_column('actions', $actions, 'id, email');
             $this->datatables->unset_column('email');
-
-        }
-
-        echo $this->datatables->generate();
-    }
-
-
-    public function getAllReparationsByTechnician($technician_id = null)
-    {
-
-        $this->repairer->checkPermissions('index', NULL, 'repair');
-        $this->load->library('datatables');
-    
-        $has_warranty = $this->input->post('has_warranty');
-        $manufacturer = $this->input->post('manufacturer');
-        $client_id_ = $this->input->post('client_id');
-        $start_date = $this->input->post('start_date');
-        $end_date = $this->input->post('end_date');
-        $model = $this->input->post('model');
-        $imei = $this->input->post('imei');
-
-
-        if ($has_warranty) {
-            $this->datatables->where('has_warranty', $has_warranty);
-        }
-
-        if ($manufacturer) {
-            $this->datatables->where('manufacturer', $manufacturer);
-        }
-
-        if ($client_id_) {
-            $this->datatables->where('client_id', $client_id_);
-        }
-
-
-        if ($model) {
-            $this->datatables->where('model_name', $model);
-        }
-
-        if ($imei) {
-            $this->datatables->like('imei', $imei);
-        }
-
-        if ($start_date && $end_date) {
-            $this->datatables->where('DATE(date_opening) >=', $start_date);
-            $this->datatables->where('DATE(date_opening) <=', $end_date);
-        }
-        
-        if ($technician_id) {
-            $this->datatables->where('assigned_to', $technician_id);
-            $this->datatables
-            ->select('reparation.id as id, CONCAT(reparation.id, "___", code), reparation.imei as imei, defect, model_name, date_opening, if(status > 0, CONCAT(status.label, "____", status.bg_color, "____", status.fg_color, "____", status.id, "____" ,reparation.id), "cancelled") as status, a.first_name, (SELECT CONCAT(first_name, " ", last_name) FROM users WHERE reparation.updated_by = users.id) as modified_by, grand_total')
-            ->join('status', 'status.id=reparation.status', 'left')
-            ->join('users a', 'a.id=reparation.created_by', 'left')
-            ->from('reparation');
-            $this->datatables->unset_column('id');
 
         }
 

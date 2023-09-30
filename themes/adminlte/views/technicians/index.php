@@ -33,12 +33,6 @@
                             </a>
                             
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="<?= base_url('panel/technicians/import_csv'); ?>" data-toggle="modal" data-target="#myModal">
-                                <i class="fas fa-file-excel"></i> <?= lang("import_customers_by_csv"); ?>
-                            </a>
-                            <a href="#" class="bpo dropdown-item" title="<b><?= lang("delete_selected") ?></b>" data-content="<p><?= lang('r_u_sure') ?></p><button type='button' class='btn-icon btn btn-danger' id='delete' data-action='delete'><i class='fas fa-trash img-circle text-danger'></i> <?= lang('i_m_sure') ?></a> <button class='btn bpo-close btn-default btn-icon'><i class='fas fa-trash img-circle text-muted'></i> <?= lang('no') ?></button>"  data-html="true" data-placement="left">
-                                <i class="fas fa-trash "></i> <?= lang('delete_selected') ?>
-                            </a>
 
                         </ul>
                     </div>

@@ -163,6 +163,62 @@ class Reparation extends Auth_Controller
 
         echo $this->datatables->generate();
     }
+
+
+    public function getAllReparationsByTechnician($technician_id = null)
+    {
+
+        $this->repairer->checkPermissions('index', NULL, 'repair');
+        $this->load->library('datatables');
+    
+        $has_warranty = $this->input->post('has_warranty');
+        $manufacturer = $this->input->post('manufacturer');
+        $client_id_ = $this->input->post('client_id');
+        $start_date = $this->input->post('start_date');
+        $end_date = $this->input->post('end_date');
+        $model = $this->input->post('model');
+        $imei = $this->input->post('imei');
+
+
+        if ($has_warranty) {
+            $this->datatables->where('has_warranty', $has_warranty);
+        }
+
+        if ($manufacturer) {
+            $this->datatables->where('manufacturer', $manufacturer);
+        }
+
+        if ($client_id_) {
+            $this->datatables->where('client_id', $client_id_);
+        }
+
+
+        if ($model) {
+            $this->datatables->where('model_name', $model);
+        }
+
+        if ($imei) {
+            $this->datatables->like('imei', $imei);
+        }
+
+        if ($start_date && $end_date) {
+            $this->datatables->where('DATE(date_opening) >=', $start_date);
+            $this->datatables->where('DATE(date_opening) <=', $end_date);
+        }
+        
+        if ($technician_id) {
+            $this->datatables->where('assigned_to', $technician_id);
+            $this->datatables
+            ->select('reparation.id as id, CONCAT(reparation.id, "___", code), reparation.imei as imei, defect, model_name, date_opening, if(status > 0, CONCAT(status.label, "____", status.bg_color, "____", status.fg_color, "____", status.id, "____" ,reparation.id), "cancelled") as status, a.first_name, (SELECT CONCAT(first_name, " ", last_name) FROM users WHERE reparation.updated_by = users.id) as modified_by, grand_total')
+            ->join('status', 'status.id=reparation.status', 'left')
+            ->join('users a', 'a.id=reparation.created_by', 'left')
+            ->from('reparation');
+            $this->datatables->unset_column('id');
+
+        }
+
+        echo $this->datatables->generate();
+    }
     public function add(){
         $this->repairer->checkPermissions('add', NULL, 'repair');
         $this->load->model('inventory_model');

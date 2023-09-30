@@ -1718,7 +1718,7 @@
                             $('#techmodal').modal('hide');
                             find_client(id);
                             $('#dynamic-table').DataTable().ajax.reload();
-                            $('#view_technician').modal('show');
+                            <!-- $('#view_technician').modal('show'); -->
                         }, 500);
                     }else{
                         toastr['error'](data.error);
@@ -1920,7 +1920,7 @@
                         "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
                         "iDisplayLength": parseInt(site.settings.rows_per_page),
                         'bProcessing': true, 'bServerSide': true,
-                        'sAjaxSource': site.base_url + 'panel/reparation/getAllReparations/'+data.id,
+                        'sAjaxSource': site.base_url + 'panel/reparation/getAllReparationsByTechnician/'+data.id,
                         'fnServerData': function (sSource, aoData, fnCallback) {
                             aoData.push({
                                 "name": get_csrf_token_name,
@@ -1942,9 +1942,6 @@
                     });
     
                     var string = "<button data-dismiss=\"modal\" class=\"btn btn-default\" type=\"button\"><i class=\"fa fa-reply\"></i> "+lang.go_back+"</button>";
-                    <?php if($this->Admin || $GP['customers-edit']): ?>
-                        string += "<button data-dismiss=\"modal\" id=\"modify_tech\" href=\"#techmodal\" data-toggle=\"modal\" data-num=\"" + encodeURI(num) + "\" class=\"btn btn-success\"><i class=\"fa fa-pencil\"></i> "+lang.modify+"</button>";
-                    <?php endif; ?>
                     <?php if($this->Admin || $GP['customers-delete']): ?>
                         string += "<button id=\"delete_client\" data-dismiss=\"modal\" data-num=\"" + encodeURI(num) + "\" class=\"btn btn-danger\" type=\"button\"><i class=\"fa fa-trash-o \"></i> "+lang.delete+"</button>";
                     <?php endif; ?>

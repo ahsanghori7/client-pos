@@ -317,6 +317,13 @@ class Reports extends Auth_Controller {
         $this->render('reports/drawer');
     }
 
+    function products()
+    {
+        $this->mPageTitle = "Product wise Report";
+        $this->repairer->checkPermissions();
+        $this->render('reports/products');
+    }
+
     function getDrawerReport($pdf = NULL, $xls = NULL)
     {
         if ($this->input->get('start_date')) {
@@ -494,4 +501,193 @@ class Reports extends Auth_Controller {
 
     }
 
+
+    function getProductsReport($pdf = NULL, $xls = NULL)
+    {
+        if ($this->input->get('start_date')) {
+            $start_date = date('Y-m-d', strtotime($this->input->get('start_date'))) . " 00:00:00";
+        } else {
+            $start_date = date('Y-m-d 00:00:00');
+        }
+        if ($this->input->get('end_date')) {
+            $end_date = date('Y-m-d', strtotime($this->input->get('end_date'))) . " 23:59:59";
+        } else {
+            $end_date = date('Y-m-d 23:59:59');
+        }
+
+
+        if ($pdf || $xls) {
+             $this->db
+                ->select("date, closed_at, (SELECT CONCAT(users.first_name, ' ', users.last_name) FROM users where users.id=pos_register.user_id) as opened_by,(SELECT CONCAT(users.first_name, ' ', users.last_name) FROM users where users.id=pos_register.closed_by) as closed_by, cash_in_hand, total_cc, total_cheques, total_cash, total_cc_submitted, total_cheques_submitted,total_cash_submitted", FALSE)
+                ->from("pos_register")
+                ->order_by('date desc');
+
+            if ($start_date) {
+                $this->db->where('date BETWEEN "' . $start_date . '" and "' . $end_date . '"');
+            }
+
+            $q = $this->db->get();
+            if ($q->num_rows() > 0) {
+                foreach (($q->result()) as $row) {
+                    $data[] = $row;
+                }
+            } else {
+                $data = NULL;
+            }
+
+            if (!empty($data)) {
+
+                $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+                $sheet = $spreadsheet->getActiveSheet();
+          
+                $sheet->setTitle(lang('drawer_report'));
+                $sheet->SetCellValue('A2', lang('open_time'));
+                $sheet->SetCellValue('B2', lang('close_time'));
+                $sheet->SetCellValue('C2', lang('opened_by'));
+                $sheet->SetCellValue('D2', lang('closed_by'));
+                $sheet->SetCellValue('E2', lang('cash_in_hand'));
+                $sheet->SetCellValue('F2', lang('cc_slips'));
+                $sheet->SetCellValue('G2', lang('cheques'));
+                $sheet->SetCellValue('H2', lang('total_cash'));
+                $sheet->SetCellValue('I2', lang('cc_slips_submitted'));
+                $sheet->SetCellValue('J2', lang('cheques_submitted'));
+                $sheet->SetCellValue('K2', lang('total_cash_submitted'));
+               
+
+                $sheet->SetCellValue('A1', sprintf(lang('drawer_report_Date'), date('m-d-Y H:i:s', strtotime($start_date)), date('m-d-Y H:i:s', strtotime($end_date))));
+                $sheet->mergeCells('A1:K1');
+
+                
+                $row = 3;
+                foreach ($data as $data_row) {
+                    $ir = $row + 1;
+                    if ($ir % 2 == 0) {
+                        $style_header = array(                  
+                            'fill' => array(
+                                'type' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                                'color' => array('rgb'=>'CCCCCC'),
+                            ),
+                        );
+                        $sheet->getStyle("A$row:K$row")->applyFromArray( $style_header );
+                    }
+
+                    $sheet->SetCellValue('A' . $row, ($data_row->date));
+                    $sheet->SetCellValue('B' . $row, $data_row->closed_at);
+                    $sheet->SetCellValue('C' . $row, $data_row->opened_by);
+                    $sheet->SetCellValue('D' . $row, $data_row->closed_by);
+                    $sheet->SetCellValue('E' . $row, $data_row->cash_in_hand);
+                    $sheet->SetCellValue('F' . $row, $data_row->total_cc);
+                    $sheet->SetCellValue('G' . $row, $data_row->total_cheques);
+                    $sheet->SetCellValue('H' . $row, $data_row->total_cash);
+                    $sheet->SetCellValue('I' . $row, $data_row->total_cc_submitted);
+                    $sheet->SetCellValue('J' . $row, $data_row->total_cheques_submitted);
+                    $sheet->SetCellValue('K' . $row, $data_row->total_cash_submitted);
+                    if($data_row->total_cash_submitted < $data_row->total_cash || $data_row->total_cheques_submitted < $data_row->total_cheques || $data_row->total_cc_submitted < $data_row->total_cc) {
+                        $sheet->getStyle('A'.$row.':K'.$row)->applyFromArray(
+
+                                array( 'fill' => array('type' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID, 'color' => array('rgb' => 'F2DEDE')) )
+                                );
+                    }
+                    $row++;
+                }
+
+
+
+                $sheet->getColumnDimension('A')->setWidth(25);
+                $sheet->getColumnDimension('B')->setWidth(25);
+                $sheet->getColumnDimension('C')->setWidth(25);
+                $sheet->getColumnDimension('D')->setWidth(25);
+                $sheet->getColumnDimension('E')->setWidth(15);
+                $sheet->getColumnDimension('F')->setWidth(15);
+                $sheet->getColumnDimension('G')->setWidth(15);
+                $sheet->getColumnDimension('H')->setWidth(15);
+                $sheet->getColumnDimension('I')->setWidth(15);
+                $sheet->getColumnDimension('J')->setWidth(15);
+                $sheet->getColumnDimension('K')->setWidth(15);
+                $filename = 'register_report';
+
+                $sheet->getParent()->getDefaultStyle()->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+
+                $sheet->getStyle('E2:K' . ($row))->getNumberFormat()->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+
+
+                $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+
+                $header = 'A1:K1';
+                $sheet->getStyle($header)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('94ce58');
+                $style = array(
+                    'font' => array('bold' => true,),
+                    'alignment' => array('horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,),
+                );
+                $sheet->getStyle($header)->applyFromArray($style);
+               
+
+                $header = 'A2:K2';
+                $sheet->getStyle($header)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('fdbf2d');
+                $style = array(
+                    'font' => array('bold' => true,),
+                    'alignment' => array('horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,),
+                );
+
+                $sheet->getStyle($header)->applyFromArray($style);
+
+
+                $sheet->getParent()->getDefaultStyle()->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+
+                if ($pdf) {
+                    $styleArray = [
+                        'borders' => [
+                            'allBorders' => [
+                                'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
+                                'color' => ['argb' => 'FFFF0000'],
+                            ],
+                        ],
+                    ];
+                    $sheet->getStyle('A0:K'.($row-1))->applyFromArray($styleArray);
+                    $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+                    header('Content-Type: application/pdf');
+                    header('Content-Disposition: attachment;filename="' . $filename . '.pdf"');
+                    header('Cache-Control: max-age=0');
+                    $writer = PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Mpdf');
+                    $writer->save('php://output');
+                }
+                if ($xls) {
+                    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                    header('Content-Disposition: attachment;filename="'.$filename.'.xlsx"');
+                    header('Cache-Control: max-age=0');
+
+                    $writer = PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+                    $writer->save('php://output');
+                    exit();
+                }
+            }else{
+                $this->session->set_flashdata('warning', lang('no_record_found'));
+                redirect('panel/reports/drawer');
+            }
+        } else {
+            $this->load->library('datatables');
+
+            $this->datatables
+
+                ->select("inventory.CODE AS product_code, inventory.name AS p_name,
+                COALESCE(
+                    (SELECT SUM(pi.quantity) 
+                     FROM purchase_items pi
+                     JOIN purchases p ON pi.purchase_id = p.id
+                     WHERE pi.product_code = inventory.CODE
+                     AND p.date BETWEEN ' . $start_date . ' AND '. $end_date.'), 
+                    0
+                ) AS total_purchase_quantity,
+                COALESCE (( SELECT SUM( quantity ) FROM sale_items WHERE product_code = inventory.CODE ), 0 ) AS total_sales_quantity,
+                COALESCE (( SELECT SUM( quantity ) FROM return_items WHERE product_code = inventory.CODE ), 0 ) AS total_return_items,
+                inventory.quantity AS available")
+                ->from('inventory');
+
+            // if ($start_date) {
+            //     $this->datatables->where('pos_register.date BETWEEN "' . $start_date . '" and "' . $end_date . '"');
+            // }
+            echo $this->datatables->generate();
+        }
+
+    }
 }

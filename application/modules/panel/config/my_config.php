@@ -78,20 +78,15 @@ $config['my_config'] = array(
 			)
 		),
 
-		'pos' => array(
-			'name'		=> 'pos/index',
-			'url'		=> 'pos',
-			'icon'		=> 'fa fa-desktop',
-			'icon_material'		=> 'shopping_basket',
-
-		),
-
-		'pos-return' => array(
-			'name'		=> 'view/sales',
-			'url'		=> 'sales',
-			'icon'		=> 'fa fa-list',
-			'icon_material'		=> 'list',
-
+		'sales' => array(
+			'name'		=> 'sales',
+			'url'		=> 'reports',
+			'icon'		=> 'fas fa-desktop',
+			'icon_material'		=> 'donut_small',
+			'children'  => array(
+				'pos/index'			=> 'pos',
+				'view/sales'		=> 'sales',
+			)
 		),
 
 		'purchases' => array(
@@ -116,6 +111,7 @@ $config['my_config'] = array(
 				'reports/quantity_alerts'		=> 'reports/quantity_alerts',
 				'reports/sales'		=> 'reports/sales',
 				'reports/drawer'		=> 'reports/drawer',
+				'reports/product'		=> 'reports/products',
 				'logs/index'		=> 'log/index',
 			)
 		),

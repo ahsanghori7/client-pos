@@ -382,6 +382,7 @@ $lang['reports/quantity_alerts'] = 'Quantity Alerts';
 $lang['utilities/index'] = 'Database Utilities';
 $lang['reports/sales'] = 'Sales';
 $lang['reports/drawer'] = 'Drawer Report';
+$lang['reports/product'] = 'Product Report';
 $lang['pos/index'] = 'POS';
 $lang['view/sales'] 							= 'View Sales';
 

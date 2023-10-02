@@ -1162,12 +1162,10 @@
                     jQuery('#repair_submit').removeAttr('disabled');
     
                     toastr['success'](lang.add, lang.reparation_title + ": " + lang.added);
-
+                    
                     if(again){
                         setTimeout(function () {
-                            $('.add_reparation').click();
-                            $('#dynamic-table').DataTable().ajax.reload();
-                            $('#dynamic-table-completed').DataTable().ajax.reload();
+                            location.reload(true);
                         }, 500);
                         
                     }else{
